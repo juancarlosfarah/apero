@@ -2,10 +2,10 @@
 
 # dependencies
 /node_modules
-/external
-/preprocessing/external
-/preprocessing/vendor
 vendor
+
+# don't ignore the packages we bundle
+!external
 
 # default data folder
 /data
