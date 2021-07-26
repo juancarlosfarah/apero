@@ -1,4 +1,4 @@
-function [sequence] = BuildSampleSequence(inputs, pathToWorkspace, pathToOutput)
+function [sequence] = BuildSampleSequence(inputs, subjectName, pathToWorkspace, pathToOutput)
 %BUILDSAMPLESEQUENCE Example of a sequence builder.
 %   This sequence builder runs the typical basic processing of a T1w image.
 %   
@@ -14,8 +14,9 @@ function [sequence] = BuildSampleSequence(inputs, pathToWorkspace, pathToOutput)
 % denoise
 params = {};
 config = {};
-params.inputFile = 'T1w.nii.gz';
-params.outputFile = 'T1w_denoised.nii';
+params.inputFile = sprintf('%s_T1w.nii.gz', subjectName);
+params.outputFile = sprintf('%s_T1w_denoised.nii', subjectName);
+config.verbose = true;
 deps = { params.inputFile };
 step1 = Step(@DenoiseImage, params, deps, config);
 
@@ -23,28 +24,32 @@ step1 = Step(@DenoiseImage, params, deps, config);
 % process anatomical image
 params = {};
 config = {};
-params.inputFile = 'T1w_denoised.nii';
-params.outputFolder = 'T1w_denoised.anat';
+params.inputFile = sprintf('%s_T1w_denoised.nii', subjectName);
+params.outputFolder = sprintf('%s_T1w_denoised', subjectName);
+config.verbose = true;
 deps = { params.inputFile };
-step2 = Step(@BuildProcessAnatomicalImageStep, params, deps, config);
+step2 = Step(@ProcessAnatomicalImage, params, deps, config);
 
 %% step 3
 % extract brain
 params = {};
 config = {};
-params.inputFile = 'T1w_denoised.anat/T1_biascorr.nii.gz';
-params.outputFile = 'T1w_brain.nii.gz';
+params.inputFile = sprintf('%s_T1w_denoised.anat/T1_biascorr.nii.gz', subjectName);
+params.outputFile = sprintf('%s_T1w_brain.nii.gz', subjectName);
 config.type = 'R';
 config.f = 0.4;
-deps = { inputFile };
+config.m = true;
+config.verbose = false;
+deps = { params.inputFile };
 step3 = Step(@ExtractBrain, params, deps, config);
 
 %% step 4
 % fill mask
 params = {};
 config = {};
-params.inputFile = 'T1w_brain_mask.nii.gz';
-params.outputFile = 'T1w_brain_mask_filled.nii.gz';
+params.inputFile = sprintf('%s_T1w_brain_mask.nii.gz', subjectName);
+params.outputFile = sprintf('%s_T1w_brain_mask_filled.nii.gz', subjectName);
+config.verbose = true;
 deps = { params.inputFile };
 step4 = Step(@FillMask, params, deps, config);
 
@@ -53,9 +58,10 @@ step4 = Step(@FillMask, params, deps, config);
 % extra step to be very precise on the extraction
 params = {};
 config = {};
-params.inputFile1 = 'T1w_denoised.anat/T1_biascorr.nii.gz';
-params.inputFile2 = 'T1w_brain_mask_filled.nii.gz';
-params.outputFile = 'T1w_brain_mul.nii.gz';
+params.inputFile1 = sprintf('%s_T1w_denoised.anat/T1_biascorr.nii.gz', subjectName);
+params.inputFile2 = sprintf('%s_T1w_brain_mask_filled.nii.gz', subjectName);
+params.outputFile = sprintf('%s_T1w_brain_mul.nii.gz', subjectName);
+config.verbose = true;
 deps = { params.inputFile1, params.inputFile2 };
 step5 = Step(@MultiplyImages, params, deps, config);
 
@@ -63,16 +69,16 @@ step5 = Step(@MultiplyImages, params, deps, config);
 steps = { step1, step2, step3, step4, step5 };
 
 % these files will be copied from the workspace to the output path
-outputs = { 'T1w.nii.gz',  ...
-            'T1w_brain.nii.gz', ...
-            'T1w_brain_mask_filled.nii.gz', ...
-            'T1w_brain_mul.nii.gz' };
+outputs = { sprintf('%s_T1w.nii.gz', subjectName)  ...
+            sprintf('%s_T1w_brain.nii.gz', subjectName), ...
+            sprintf('%s_T1w_brain_mask_filled.nii.gz', subjectName), ...
+            sprintf('%s_T1w_brain_mul.nii.gz', subjectName) };
 
 sequence = Sequence(steps, ...
                     inputs, ...
                     outputs, ...
                     pathToWorkspace, ...
                     pathToOutput, ...
-                    false);
+                    true);
 
 end

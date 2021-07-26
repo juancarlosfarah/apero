@@ -1,6 +1,7 @@
 function [pipeline] = BuildSamplePipeline(pathToWorkspace, ...
                                           pathToDataset, ...
-                                          pathToOutput)
+                                          pathToOutput, ...
+                                          numSubjects)
 %BUILDSAMPLEPIPELINE Example of a pipeline builder.
 %   This builder creates a pipeline with one sequence per subject, based
 %   on the format of a BIDS dataset's participants.tsv file.
@@ -13,8 +14,15 @@ function [pipeline] = BuildSamplePipeline(pathToWorkspace, ...
 %   Output:
 %   - pipeline:  Built pipeline.
 
+arguments
+  pathToWorkspace char = '.'
+  pathToDataset char = '.'
+  pathToOutput char = '.'
+  numSubjects int8 {mustBeNonnegative} = 0
+end
+
 % names of inputs needed to start the sequence
-inputs = { 'T1w.nii.gz' };
+inputs = { '%s/T1w.nii.gz' };
 numInputs = length(inputs);
 
 % get information about participants
@@ -25,7 +33,14 @@ subjects = readtable(fullfile(pathToDataset, 'participants.tsv'), ...
                      'delimitedtext', ...
                      'PreserveVariableNames', ...
                      true);
-numSubjects = height(subjects);
+
+tableHeight = height(subjects);
+if ~numSubjects
+  numSubjects = tableHeight;
+else
+  numSubjects = min(numSubjects, tableHeight);
+end
+
 sequences = cell(1, numSubjects);
 
 % create a sequence for each subject
@@ -41,18 +56,20 @@ for i = 1 : numSubjects
   subjectInputs = cell(1, numInputs);
   for j = 1 : numInputs
     input = inputs{j};
-    subjectInputs{j} = fullfile(subjectPath, input);
+    subjectInputs{j} = fullfile(subjectPath, sprintf(input, subjectName));
   end
 
   pathToSubjectWorkspace = fullfile(pathToWorkspace, subjectName);
   pathToSubjectOutput = fullfile(pathToOutput, subjectName);
   sequences{i} = BuildSampleSequence(subjectInputs, ...
+                                     subjectName, ...
                                      pathToSubjectWorkspace, ...
                                      pathToSubjectOutput);
 end
 
 % create a pipeline with the sequences
-pipeline = Pipeline(sequences, true);
+parallel = false;
+pipeline = Pipeline(sequences, parallel);
 
 end
 
