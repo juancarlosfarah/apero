@@ -36,15 +36,23 @@ classdef Step
       isValid = true;
     end
 
-    function [success, output] = run(obj, pathToWorkspace)
+    function [status, output] = run(obj, pathToWorkspace)
       %RUN Summary of this method goes here
       %   Detailed explanation goes here
-      isValid = obj.validateDependencies();
+      isValid = obj.validateDependencies(pathToWorkspace);
       if ~isValid
-        success = false;
+        status = false;
         return
       end
-      output = obj.Operation(pathToWorkspace);
+      % need to convert struct to name-value paired arguments
+      params = namedargs2cell(obj.Parameters);
+      config = namedargs2cell(obj.Configuration);
+      % status = 0 signals everything went fine
+      % if operation fails, returns a nonzero value in
+      % status and an explanatory message in result
+      [status, output] = obj.Operation(pathToWorkspace, ...
+                                       params{:}, ...
+                                       config{:});
     end
   end
 end

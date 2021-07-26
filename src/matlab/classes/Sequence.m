@@ -1,7 +1,7 @@
 classdef Sequence
   %SEQUENCE Summary of this class goes here
   %   Detailed explanation goes here
-  
+
   properties
     Steps
     Inputs
@@ -54,7 +54,7 @@ classdef Sequence
         [status, msg] = mkdir(obj.WorkspacePath);
         if (status ~= 1)
           % todo: throw error
-          disp(msg);
+          fprintf(msg);
         end
 
         % copy inputs to workspace
@@ -70,7 +70,7 @@ classdef Sequence
       obj.Ready = true;
     end
 
-    function obj = cleanUpInputs(obj) 
+    function obj = cleanUpInputs(obj)
       % delete inputs from workspace
       for d=1:length(obj.Inputs)
         input = obj.Inputs{d};
@@ -85,20 +85,34 @@ classdef Sequence
     end
 
     function obj = cleanUp(obj)
-      if ~obj.NoCleanUp
+      if obj.NoCleanUp
         return
       end
-      delete(fullfile(obj.WorkspacePath, '*'));
+      % remove the workspace
+      [status, msg] = rmdir(obj.WorkspacePath, 's');
+      if (status ~= 1)
+        % todo: throw error
+        fprintf(msg);
+      end
       obj.Ready = false;
     end
 
     function [] = extractOutputs(obj)
+      % create the output path
+      [status, msg] = mkdir(obj.OutputPath);
+      if (status ~= 1)
+        % todo: throw error
+        disp(msg);
+      end
+
       % extract outputs from workspace
-      for o = 1 : length(obj.Outputs)
-        outputFileName = obj.Outputs{d};
+      for i = 1 : length(obj.Outputs)
+        outputFileName = obj.Outputs{i};
         outputFile = fullfile(obj.WorkspacePath, outputFileName);
         if exist(outputFile, 'file')
-          copyfile(outputFile, fullfile(obj.OutputPath));
+          copyfile(outputFile, obj.OutputPath);
+        else
+          fprintf('missing output %s\n', outputFile);
         end
       end
     end
@@ -109,23 +123,40 @@ classdef Sequence
     end
 
     % setters
-    function obj = set.Steps(obj, ~)
+    function obj = set.Steps(obj, steps)
+      obj.Steps = steps;
     end
 
-    function obj = set.WorkspacePath(obj, ~)
+    function obj = set.WorkspacePath(obj, workspacePath)
+      obj.WorkspacePath = workspacePath;
     end
 
-    function obj = set.OutputPath(obj, ~)
+    function obj = set.OutputPath(obj, outputPath)
+      obj.OutputPath = outputPath;
     end
 
-    function [success, output] = run(obj)
+    function [sequenceExecution] = run(obj)
       %RUN Summary of this method goes here
       %   Detailed explanation goes here
+
+      % create a sequence execution to track results
+      sequenceExecution = SequenceExecution();
+
+      % start execution
+      timeStart = tic;
+      sequenceExecution.StartTime = datetime;
+      
+      % by default succeed
+      success = true;
 
       % check if sequence is valid
       isValid = obj.validate();
       if ~isValid
         success = false;
+        % prepare execution results
+        sequenceExecution.Success = success;
+        sequenceExecution.Duration = toc(timeStart);
+        sequenceExecution.EndTime = datetime;
         return
       end
 
@@ -134,35 +165,64 @@ classdef Sequence
       end
 
       % execute all steps sequentially
-      % todo: allow parallel steps
-      for i=1:length(obj.Steps)
+      for i = 1 : length(obj.Steps)
         step = obj.Steps{i};
 
         % abort if step is not valid
-        isValidStep = step.isValid();
+        isValidStep = step.validateDependencies(obj.WorkspacePath);
         if ~isValidStep
           success = false;
+          % prepare execution results
+          sequenceExecution.Success = success;
+          sequenceExecution.Result = obj.Results;
+          sequenceExecution.Duration = toc(timeStart);
+          sequenceExecution.EndTime = datetime;
+          error = sprintf('step %s is not valid\n', i);
+          sequenceExecution.Error = error;
+          fprintf(error);
           return
         end
 
         % execute step
-        [stepSuccess, result] = step.run(obj.WorkspacePath);
+        [status, result] = step.run(obj.WorkspacePath);
         obj.Results{i} = result;
 
         % if a step does not succeed, abort
         % todo: have "optional" steps
-        if ~stepSuccess
+        if status ~= 0
           success = false;
+          % prepare execution results
+          sequenceExecution.Success = success;
+          sequenceExecution.Result = obj.Results;
+          sequenceExecution.Duration = toc(timeStart);
+          sequenceExecution.EndTime = datetime;
+          % todo: throw error
+          error = sprintf('step %s failed with status %s and message %s\n', ...
+                          i, ...
+                          status, ...
+                          result);
+          fprintf(error);
+          sequenceExecution.Error = error;
+          fprintf(error);
           return
         end
       end
       % return the list of outputs
       output = obj.Results;
-      
+
+      % extract outputs
+      obj.extractOutputs();
+
       % clean up
       if ~obj.NoCleanUp
-        obj.cleanUp()
+        obj.cleanUp();
       end
+      
+      % prepare execution results
+      sequenceExecution.Success = success;
+      sequenceExecution.Result = output;
+      sequenceExecution.Duration = toc(timeStart);
+      sequenceExecution.EndTime = datetime;
     end
   end
 end
