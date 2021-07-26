@@ -1,7 +1,8 @@
 function [pipeline] = BuildSamplePipeline(pathToWorkspace, ...
                                           pathToDataset, ...
                                           pathToOutput, ...
-                                          numSubjects)
+                                          numSubjects, ...
+                                          config)
 %BUILDSAMPLEPIPELINE Example of a pipeline builder.
 %   This builder creates a pipeline with one sequence per subject, based
 %   on the format of a BIDS dataset's participants.tsv file.
@@ -19,10 +20,11 @@ arguments
   pathToDataset char = '.'
   pathToOutput char = '.'
   numSubjects int8 {mustBeNonnegative} = 0
+  config = {}
 end
 
 % names of inputs needed to start the sequence
-inputs = { '%s/T1w.nii.gz' };
+inputs = { 'anat/%s_T1w.nii.gz' };
 numInputs = length(inputs);
 
 % get information about participants
@@ -64,7 +66,8 @@ for i = 1 : numSubjects
   sequences{i} = BuildSampleSequence(subjectInputs, ...
                                      subjectName, ...
                                      pathToSubjectWorkspace, ...
-                                     pathToSubjectOutput);
+                                     pathToSubjectOutput, ...
+                                     config);
 end
 
 % create a pipeline with the sequences

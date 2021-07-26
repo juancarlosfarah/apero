@@ -1,17 +1,13 @@
 % ensure variables are cleared
 clearvars;
 
-% get data folder relative to this file
-filePath = fileparts(which(mfilename));
-pathToDataFolder = fullfile(filePath, '../../../../neurochi/data/');
+% build configuration
+config = BuildSampleConfiguration();
 
+pipeline = BuildSamplePipeline(config.common.pathToWorkspace, ...
+                               config.common.pathToDataset, ...
+                               config.common.pathToOutput, ...
+                               config.common.numSubjects, ...
+                               config.t1);
 
-pathToWorkspace = fullfile(pathToDataFolder, 'w1');
-pathToDataset = fullfile(pathToDataFolder, 'input');
-pathToOutput = fullfile(pathToDataFolder, 'o1');
-pipeline = BuildSamplePipeline(pathToWorkspace, ...
-                               pathToDataset, ...
-                               pathToOutput, ...
-                               1);
-
-outputs = pipeline.run();
+pipelineExecution = pipeline.run();

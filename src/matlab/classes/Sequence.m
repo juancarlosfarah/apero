@@ -145,7 +145,7 @@ classdef Sequence
       % start execution
       timeStart = tic;
       sequenceExecution.StartTime = datetime;
-      
+
       % by default succeed
       success = true;
 
@@ -217,7 +217,7 @@ classdef Sequence
       if ~obj.NoCleanUp
         obj.cleanUp();
       end
-      
+
       % prepare execution results
       sequenceExecution.Success = success;
       sequenceExecution.Result = output;

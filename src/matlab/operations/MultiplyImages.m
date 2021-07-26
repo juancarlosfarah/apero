@@ -14,10 +14,10 @@ function [status, result] = MultiplyImages(pathToWorkspace, ...
 %   - result:  Result returned by system call.
 
 arguments
-  pathToWorkspace string = '.'
-  params.inputFile1 string
-  params.inputFile2 string
-  params.outputFile string
+  pathToWorkspace char = '.'
+  params.inputFile1 char
+  params.inputFile2 char
+  params.outputFile char
   config.verbose logical = false
 end
 

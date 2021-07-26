@@ -14,9 +14,9 @@ function [status, result] = FillMask(pathToWorkspace, ...
 %   - result:  Result returned by system call.
 
 arguments
-  pathToWorkspace string = '.'
-  params.inputFile string
-  params.outputFile string
+  pathToWorkspace char = '.'
+  params.inputFile char
+  params.outputFile char
   config.verbose logical = false
 end
 
@@ -24,7 +24,7 @@ fullInputFile = fullfile(pathToWorkspace, params.inputFile);
 fullOutputFile = fullfile(pathToWorkspace, params.outputFile);
 command = 'fslmaths %s -fillh %s';
 sentence = sprintf(command, fullInputFile, fullOutputFile);
-  
+
 [status, result] = CallSystem(sentence, config.verbose);
 
 end
