@@ -25,8 +25,8 @@ arguments
   beta double = 1
   patchRadius int8 = 1
   searchRadius int8 = 1
-  rician boolean = false
-  verbose boolean = false
+  rician logical = false
+  verbose logical = false
 end
 
 %% normalize intensity range to [0, 256]
