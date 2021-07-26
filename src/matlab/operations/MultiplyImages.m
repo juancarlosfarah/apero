@@ -18,7 +18,7 @@ arguments
   params.inputFile1 string
   params.inputFile2 string
   params.outputFile string
-  config.verbose boolean = false
+  config.verbose logical = false
 end
 
 fullInputFile1 = fullfile(pathToWorkspace, params.inputFile1);

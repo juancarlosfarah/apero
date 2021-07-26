@@ -14,11 +14,11 @@ function [status, result] = ExtractBrain(pathToWorkspace, ...
 %   - result:   ...  
 
 arguments
-  pathToWorkspace string = '.'
-  params.inputFile string
-  params.outputFolder string
+  pathToWorkspace char = '.'
+  params.inputFile char
+  params.outputFile char
   % variations on default bet2 functionality (mutually exclusive options):
-  config.type string {mustBeMember(config.type, { ...
+  config.type char {mustBeMember(config.type, { ...
     'R', ... % robust brain centre estimation (iterates BET several times)
     'S', ... % eye & optic nerve cleanup (can be useful in SIENA - disables -o option)
     'B', ... % bias field & neck cleanup (can be useful in SIENA)    
@@ -27,41 +27,41 @@ arguments
     'A'      % run bet2 and then betsurf to get additional skull and scalp surfaces (includes registrations)
   })} = ''
   % generate brain surface outline overlaid onto original image
-  config.o boolean = false
+  config.o logical = false
   % generate binary brain mask
-  config.m boolean = false
+  config.m logical = false
   % generate approximate skull image
-  config.s boolean = false
+  config.s logical = false
   % don't generate segmented brain image output
-  config.n boolean = false
+  config.n logical = false
   % fractional intensity threshold (0->1); default=0.5;
   % smaller values give larger brain outline estimates
-  config.f float {mustBeInRange(config.f, 0, 1)} = 0.5
+  config.f double {mustBeInRange(config.f, 0, 1)} = 0.5
   % vertical gradient in fractional intensity threshold (-1->1); default=0;
   % positive values give larger brain outline at bottom, smaller at top
-  config.g float {mustBeInRange(config.g, -1, 1)} = 0
+  config.g double {mustBeInRange(config.g, -1, 1)} = 0
   % apply thresholding to segmented brain image and mask
-  config.t boolean = false
+  config.t logical = false
   % generates brain surface as mesh in .vtk format
-  config.e boolean = false
+  config.e logical = false
   % debug (don't delete temporary intermediate images)
-  config.debug boolean = false
-  config.d boolean = false
+  config.debug logical = false
+  config.d logical = false
   % verbose (switch on diagnostic messages)
-  config.verbose boolean = false
-  config.v boolean = false
+  config.verbose logical = false
+  config.v logical = false
 end
 
 %% main command
 fullInputFile = fullfile(pathToWorkspace, params.inputFile);
-fullOutputFile = fullfile(pathToWorkspace, params.outputFolder);
+fullOutputFile = fullfile(pathToWorkspace, params.outputFile);
 command = 'bet %s %s';
 command = sprintf(command, fullInputFile, fullOutputFile);
 
 %% type
 % select main type of extraction (mutually exclusive options)
-if ~isempty(type)
-  command = strcat([command ' -' type]);
+if ~isempty(config.type)
+  command = strcat([command ' -' config.type]);
 end
 
 %% options
@@ -118,7 +118,7 @@ if config.debug || config.d
 end
 
 %% execute
-[status, result] = CallSystem(command, verbose);
+[status, result] = CallSystem(command, config.verbose);
 
 end
 

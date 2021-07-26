@@ -3,6 +3,10 @@ function [status, result] = ProcessAnatomicalImage(pathToWorkspace, ...
                                                    config)
 %PROCESSANATOMICALIMAGE Processes an anatomical image using `fsl_anat`.
 %   Uses `fsl_anat` to process an anatomical image.
+%   
+%   Return status and result. A status of 0 signals everything went fine
+%   If operation fails, returns a nonzero value in status and an
+%   explanatory message in result.
 %
 %   Input:
 %   - pathToWorkspace:  ...
@@ -11,20 +15,20 @@ function [status, result] = ProcessAnatomicalImage(pathToWorkspace, ...
 %
 %   Output:
 %   - status:  ...
-%   - result:   ...  
+%   - result:  ...  
 
 arguments
   pathToWorkspace string = '.'
   params.inputFile string
   params.outputFolder string
-  config.clobber boolean = true
-  config.noReg boolean = true
-  config.noNonLinReg boolean = true
-  config.noSeg boolean = true
-  config.weakBias boolean = true
-  config.noReorient boolean = true
-  config.noCrop boolean = true
-  config.verbose boolean = false
+  config.clobber logical = true
+  config.noReg logical = true
+  config.noNonLinReg logical = true
+  config.noSeg logical = true
+  config.weakBias logical = true
+  config.noReorient logical = true
+  config.noCrop logical = true
+  config.verbose logical = false
 end
 
 % run `fsl_anat` (it should be in the path)
@@ -77,6 +81,8 @@ end
 command = strcat([command ' -i %s -o %s']);
 sentence = sprintf(command, fullInputFile, fullOutputFolder);
 
-[status, result] = CallSystem(sentence, verbose);
+% if operation fails, returns a nonzero value in
+% status and an explanatory message in result
+[status, result] = CallSystem(sentence, config.verbose);
 
 end
