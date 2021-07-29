@@ -22,6 +22,9 @@ end
 systemOutput = '';
 if verbose
   systemOutput = '-echo';
+  
+  % also log the sentence that will be executed
+  fprintf('executing command: %s\n', sentence);
 end
 
 % if operation fails system returns a nonzero value in
