@@ -23,10 +23,8 @@ function [status, result] = PerformLinearImageRegistration(pathToWorkspace, ...
 %   Available options are:
 %         -in  <inputvol>                    (no default)
 %         -ref <refvol>                      (no default)
-%         -init <matrix-filname>             (input 4x4 affine matrix)
 %         -out, -o <outputvol>               (default is none)
 %         -datatype {char,short,int,float,double}                    (force output data type)
-%         -cost {mutualinfo,corratio,normcorr,normmi,leastsq,labeldiff,bbr}        (default is corratio)
 %         -searchcost {mutualinfo,corratio,normcorr,normmi,leastsq,labeldiff,bbr}  (default is corratio)
 %         -usesqform                         (initialise using appropriate sform or qform)
 %         -displayinit                       (display initial matrix)
@@ -37,13 +35,11 @@ function [status, result] = PerformLinearImageRegistration(pathToWorkspace, ...
 %         -noresample                        (do not change input sampling)
 %         -forcescaling                      (force rescaling even for low-res images)
 %         -minsampling <vox_dim>             (set minimum voxel dimension for sampling (in mm))
-%         -applyxfm                          (applies transform (no optimisation) - requires -init)
 %         -applyisoxfm <scale>               (as applyxfm but forces isotropic resampling)
 %         -paddingsize <number of voxels>    (for applyxfm: interpolates outside image by size)
 %         -searchrx <min_angle> <max_angle>  (angles in degrees: default is -90 90)
 %         -searchry <min_angle> <max_angle>  (angles in degrees: default is -90 90)
 %         -searchrz <min_angle> <max_angle>  (angles in degrees: default is -90 90)
-%         -nosearch                          (sets all angular search ranges to 0 0)
 %         -coarsesearch <delta_angle>        (angle in degrees: default is 60)
 %         -finesearch <delta_angle>          (angle in degrees: default is 18)
 %         -schedule <schedule-file>          (replaces default schedule)
@@ -70,17 +66,33 @@ arguments
   pathToWorkspace char = '.'
   params.inputVolume char
   params.referenceVolume char
-  params.outputVolume char
-  params.outputMatrix char
+  params.outputVolume char = ''
+  params.outputMatrix char = ''
+  % input 4x4 affine matrix
+  params.initMatrix char = ''
   % number of transform degrees of freedom
   config.dof int8 = 12
+  % applies transform (no optimisation) - requires -init
+  config.applyxfm logical = false
+  % sets all angular search ranges to 0 0
+  config.nosearch logical = false
   % final interpolation
   config.interp char {mustBeMember(config.interp, { ...
     'trilinear', ...
     'nearestneighbour', ...
     'sinc', ...
-    'spline'
+    'spline' ...
   })} = 'trilinear'
+  % cost function (default is corratio)
+  config.cost char {mustBeMember(config.cost, { ...
+    'mutualinfo', ...
+    'corratio', ...
+    'normcorr', ...
+    'normmi', ...
+    'leastsq', ...
+    'labeldiff', ...
+    'bbr' ...
+  })} = 'corratio'
   config.verbose logical = false
   config.v logical = false
 end
@@ -91,31 +103,64 @@ fullReferenceVolume = fullfile(pathToWorkspace, params.referenceVolume);
 command = 'flirt -in %s -ref %s';
 command = sprintf(command, fullInputVolume, fullReferenceVolume);
 
-%% outputs
-% select outputs
+%% secondary params
+% input 4x4 affine matrix
+if ~isempty(params.initMatrix)
+  fullInitMatrix = fullfile(pathToWorkspace, params.initMatrix);
+  command = sprintf('%s -init %s', command, fullInitMatrix);
+end
+
+% output volume
 if ~isempty(params.outputVolume)
-  command = strcat([command ' -o ' params.outputVolume]);
+  fullOutputVolume = fullfile(pathToWorkspace, params.outputVolume);
+  command = sprintf('%s -o %s', command, fullOutputVolume);
 end
 
 % output in 4x4 ascii format
 if ~isempty(params.outputMatrix)
-  command = strcat([command ' -omat ' params.outputMatrix]);
+  fullOutputMatrix = fullfile(pathToWorkspace, params.outputMatrix);
+  command = sprintf('%s -omat %s', command, fullOutputMatrix);
 end
 
 %% options
 % number of transform degrees of freedom
 if config.dof
-  command = strcat([command ' -dof ' config.dof]);
+  command = sprintf('%s -dof %d', command, config.dof);
 end
 
 % final interpolation
 if config.interp
-  command = strcat([command ' -interp ' config.interp]);
+  command = sprintf('%s -interp %s', command, config.interp);
+end
+
+% cost function
+if config.cost
+  command = sprintf('%s -cost %s', command, config.cost);
+end
+
+% applies transform (no optimisation)
+if config.applyxfm
+  % requires init
+  if ~params.initMatrix
+    % todo: throw error
+    error = 'PerformLinearImageRegistration: applyxfm requires initMatrix parameter';
+    fprintf(error);
+    % signals error
+    status = 1;
+    result = error;
+    return
+  end
+  command = sprintf('%s -applyxfm', command);
+end
+
+% sets all angular search ranges to 0 0
+if config.nosearch
+  command = sprintf('%s -nosearch', command);
 end
 
 % verbose (switch on diagnostic messages)
 if config.verbose || config.v
-  command = strcat([command ' -v']);
+  command = sprintf('%s -v', command);
 end
 
 %% execute
