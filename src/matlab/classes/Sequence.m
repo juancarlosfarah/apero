@@ -84,7 +84,8 @@ classdef Sequence
       obj.Ready = false;
     end
 
-    function obj = cleanUp(obj)
+    function [obj, success] = cleanUp(obj)
+      success = true;
       if obj.NoCleanUp
         return
       end
@@ -93,16 +94,19 @@ classdef Sequence
       if (status ~= 1)
         % todo: throw error
         fprintf(msg);
+        success = false;
       end
       obj.Ready = false;
     end
 
-    function [] = extractOutputs(obj)
+    function [success] = extractOutputs(obj)
+      success = true;
       % create the output path
       [status, msg] = mkdir(obj.OutputPath);
       if (status ~= 1)
         % todo: throw error
-        disp(msg);
+        fprintf(msg);
+        success = false;
       end
 
       % extract outputs from workspace
@@ -112,7 +116,9 @@ classdef Sequence
         if exist(outputFile, 'file')
           copyfile(outputFile, obj.OutputPath);
         else
-          fprintf('missing output %s\n', outputFile);
+          % todo: throw error
+          fprintf('missing sequence output %s\n', outputFile);
+          success = false;
         end
       end
     end
@@ -168,19 +174,28 @@ classdef Sequence
       for i = 1 : length(obj.Steps)
         step = obj.Steps{i};
 
+        % check if step is optional
+        optional = isfield(step.Configuration, 'optional') && ...
+                           step.Configuration.optional == true;
+
         % abort if step is not valid
         isValidStep = step.validateDependencies(obj.WorkspacePath);
         if ~isValidStep
-          success = false;
-          % prepare execution results
-          sequenceExecution.Success = success;
-          sequenceExecution.Result = obj.Results;
-          sequenceExecution.Duration = toc(timeStart);
-          sequenceExecution.EndTime = datetime;
-          error = sprintf('step %s is not valid\n', i);
-          sequenceExecution.Error = error;
-          fprintf(error);
-          return
+          if ~optional
+            success = false;
+            % prepare execution results
+            sequenceExecution.Success = success;
+            sequenceExecution.Result = obj.Results;
+            sequenceExecution.Duration = toc(timeStart);
+            sequenceExecution.EndTime = datetime;
+            err = sprintf('step %d is not valid\n', i);
+            sequenceExecution.Error = err;
+            fprintf(err);
+            return
+          % warn for optional steps
+          else
+            warning('skipping optional step %d', i)
+          end
         end
 
         % execute step
@@ -190,32 +205,42 @@ classdef Sequence
         % if a step does not succeed, abort
         % todo: have "optional" steps
         if status ~= 0
-          success = false;
-          % prepare execution results
-          sequenceExecution.Success = success;
-          sequenceExecution.Result = obj.Results;
-          sequenceExecution.Duration = toc(timeStart);
-          sequenceExecution.EndTime = datetime;
-          % todo: throw error
-          error = sprintf('step %s failed with status %s and message %s\n', ...
+          if ~optional
+            success = false;
+            % prepare execution results
+            sequenceExecution.Success = success;
+            sequenceExecution.Result = obj.Results;
+            sequenceExecution.Duration = toc(timeStart);
+            sequenceExecution.EndTime = datetime;
+            % todo: throw error
+            err = sprintf('step %d failed with status %d and message "%s"\n', ...
                           i, ...
                           status, ...
                           result);
-          fprintf(error);
-          sequenceExecution.Error = error;
-          fprintf(error);
-          return
+            fprintf(err);
+            sequenceExecution.Error = err;
+            return
+          else
+            warning('skipping optional step %d', i)
+          end
         end
       end
       % return the list of outputs
       output = obj.Results;
 
       % extract outputs
-      obj.extractOutputs();
+      extractOutputsSuccess = obj.extractOutputs();
+      
+      if ~extractOutputsSuccess
+        success = false;
+      end
 
       % clean up
       if ~obj.NoCleanUp
-        obj.cleanUp();
+        [~, cleanUpSuccess] = obj.cleanUp();
+        if ~cleanUpSuccess
+          success = false;
+        end
       end
 
       % prepare execution results
