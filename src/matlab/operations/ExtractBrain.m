@@ -52,6 +52,10 @@ arguments
   config.v logical = false
 end
 
+% normalize if multiple options mean the same thing
+verbose = config.verbose || config.v;
+dbg = config.debug || config.d;
+
 %% main command
 fullInputFile = fullfile(pathToWorkspace, params.inputFile);
 fullOutputFile = fullfile(pathToWorkspace, params.outputFile);
@@ -108,17 +112,17 @@ if config.e
 end
 
 % verbose (switch on diagnostic messages)
-if config.verbose || config.v
+if verbose
   command = strcat([command ' -v']);
 end
 
 % debug (don't delete temporary intermediate images)
-if config.debug || config.d
+if dbg
   command = strcat([command ' -d']);
 end
 
 %% execute
-[status, result] = CallSystem(command, config.verbose);
+[status, result] = CallSystem(command, verbose);
 
 end
 
