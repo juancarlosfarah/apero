@@ -13,7 +13,7 @@ function [status, result] = Dilate(pathToWorkspace, ...
 %   - status:  Status returned by system call.
 %   - result:  Result returned by system call.
 %
-% Optional arguments (You may optionally specify one or more of):
+% TODO:
 % 	--rel	use relative warp convention: x' = x + w(x)
 % 	--abs	use absolute warp convention (default): x' = w(x)
 % 	--noconstraint	do not apply the Jacobian constraint
