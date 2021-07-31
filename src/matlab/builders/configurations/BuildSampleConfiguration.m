@@ -28,19 +28,24 @@ config.common = common;
 
 % best practice is to then build an object that you can pass to one or more
 % sequences that contains all the sequence configuration
-t1 = {};
-t1.pathToOutput = fullfile(pathToDataFolder, 'o1');
-
-% inherit
-t1.verbose = common.verbose;
+%% pipeline 1: t1a
+pipeline1 = {};
+pipeline1.pathToOutput = fullfile(pathToDataFolder, 'o1');
+pipeline1.verbose = common.verbose;
 
 % provide step-specific configurations
-t1.bet.type = 'R';
-t1.bet.f = 0.4;
-t1.bet.m = true;
-
+% step 1: denoise
+pipeline1.step1.verbose = pipeline1.verbose;
+pipeline1.step1.optional = true;
+% step 2: fsl_anat
+pipeline1.step2.clobber = true;
+% step 3: bet
+pipeline1.step3.type = 'R';
+pipeline1.step3.f = 0.4;
+pipeline1.step3.m = true;
+pipeline1.step3.optional = true;
 % step configurations can also inherit from the sequence configurations
-t1.bet.verbose = t1.verbose;
+pipeline1.step3.verbose = pipeline1.verbose;
 
 % you can also order this by pipeline / step
 %% pipeline 2: register parcellations
@@ -52,7 +57,7 @@ pipeline2.step1.dof = 6;
 pipeline2.step1.interp = 'spline';
 pipeline2.step1.optional = true;
 pipeline2.step1.verbose = pipeline2.verbose;
-% step 2
+% step 2: flirt 
 pipeline2.step2.dof = 6;
 pipeline2.step2.applyxfm = true;
 pipeline2.step2.nosearch = true;
@@ -104,8 +109,34 @@ pipeline2.step12.nosearch = true;
 pipeline2.step12.optional = true;
 pipeline2.step12.verbose = pipeline2.verbose;
 
+%% pipeline 3: segmentation
+pipeline3 = {};
+pipeline3.verbose = common.verbose;
+pipeline3.pathToOutput = fullfile(pathToDataFolder, 'o3');
+pipeline3.parallel = false;
 
-% %% prepare fmri configuration object
+% step 1: fast
+pipeline3.step1.H = 0.25;
+pipeline3.step1.clobber = false;
+pipeline3.step1.optional = true;
+pipeline3.step1.verbose = pipeline3.verbose;
+
+% step 2: threshold
+pipeline3.step2.thr = 1;
+pipeline3.step2.uthr = 1;
+pipeline3.step2.optional = true;
+pipeline3.step2.verbose = pipeline3.verbose;
+
+% step 3: invert
+pipeline3.step3.clobber = false;
+pipeline3.step3.optional = true;
+pipeline3.step3.verbose = pipeline3.verbose;
+
+% step 4: binarize
+pipeline3.step4.verbose = pipeline3.verbose;
+
+
+%% prepare fmri configuration object
 %
 % fmri.acquisitionType = 'interleaved';       % way z slices were acquired (sequential, interleaved)
 % fmri.temporalResolution = 1.205;            % temporal resoltion of acquisition (verify with `mrinfo`)
@@ -121,8 +152,10 @@ pipeline2.step12.verbose = pipeline2.verbose;
 % 
 % config.fmri = fmri;
 
-config.t1 = t1;
+config.pipeline1 = pipeline1;
 config.pipeline2 = pipeline2;
+config.pipeline3 = pipeline3;
+
 
 end
 

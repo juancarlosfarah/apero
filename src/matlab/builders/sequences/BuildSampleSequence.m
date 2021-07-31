@@ -17,19 +17,18 @@ function [sequence] = BuildSampleSequence(inputs, ...
 %% step 1
 % denoise
 step1Params = {};
-step1Config = {};
+step1Config = config.step1;
 step1Params.inputFile = sprintf('%s_T1w.nii.gz', subjectName);
 step1Params.outputFile = sprintf('%s_T1w_denoised.nii', subjectName);
-% verbose can be inherited from sequence config
-step1Config.verbose = config.verbose;
 deps = { step1Params.inputFile };
-step1 = Step(@DenoiseImage, step1Params, deps, step1Config);
+outputs = { step1Params.outputFile };
+step1 = Step(@DenoiseImage, step1Params, deps, step1Config, outputs);
 
 %% step 2
 % process anatomical image
 step2Params = {};
 step2Config = {};
-step2Params.inputFile = sprintf('%s_T1w_denoised.nii', subjectName);
+step2Params.inputFile = step1Params.outputFile;
 step2Params.outputFolder = sprintf('%s_T1w_denoised', subjectName);
 step2Config.verbose = config.verbose;
 deps = { step2Params.inputFile };
@@ -39,7 +38,7 @@ step2 = Step(@ProcessAnatomicalImage, step2Params, deps, step2Config);
 % extract brain
 step3Params = {};
 % you can also assign a dedicated step configuration object
-step3Config = config.bet;
+step3Config = config.step3;
 step3Params.inputFile = sprintf('%s_T1w_denoised.anat/T1_biascorr.nii.gz', subjectName);
 step3Params.outputFile = sprintf('%s_T1w_brain.nii.gz', subjectName);
 deps = { step3Params.inputFile };
@@ -74,6 +73,7 @@ steps = { step1, step2, step3, step4, step5 };
 outputs = { sprintf('%s_T1w.nii.gz', subjectName)  ...
             sprintf('%s_T1w_brain.nii.gz', subjectName), ...
             sprintf('%s_T1w_brain_mask_filled.nii.gz', subjectName), ...
+            sprintf('%s_T1w_denoised.anat/T1_subcort_seg.nii.gz', subjectName), ...
             sprintf('%s_T1w_brain_mul.nii.gz', subjectName) };
 
 sequence = Sequence(steps, ...
