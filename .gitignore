@@ -50,3 +50,7 @@ yarn-error.log*
 # python
 /venv
 
+# readthedocs
+_build
+_static
+_templates
