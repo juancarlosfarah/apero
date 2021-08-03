@@ -3,8 +3,12 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Apéro's documentation!
-=================================
+-----
+Apéro
+-----
+
+A Preprocessing Pipeline Builder for Neuroimaging Data
+======================================================
 
 Contents
 --------
@@ -13,6 +17,8 @@ Contents
    :maxdepth: 3
 
    installation
+   getting_started
+   concepts
    usage
 
 
