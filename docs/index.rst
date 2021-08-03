@@ -10,6 +10,14 @@ Apéro
 A Preprocessing Pipeline Builder for Neuroimaging Data
 ======================================================
 
+Motivation
+----------
+
+We all know that preprocessing neuroimaging data is hard and tedious. We created
+Apéro to make this process easier and to promote reliable preprocessing pipelines
+that can help make research reproducible. This work builds on the preprocessing
+pipeline used in `Amico et al., NeuroImage (2017) <https://doi.org/10.1016/j.neuroimage.2017.01.020)>`_.
+
 Contents
 --------
 
