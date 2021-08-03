@@ -174,13 +174,22 @@ classdef Sequence
       for i = 1 : length(obj.Steps)
         step = obj.Steps{i};
 
+        % check if we are skipping this step
+        skip = isfield(step.Configuration, 'skip') && ...
+                       step.Configuration.skip == true;
+        if skip
+          warning('skipping step %d', i)
+          continue;
+        end
+        
         % check if step is optional
         optional = isfield(step.Configuration, 'optional') && ...
                            step.Configuration.optional == true;
 
-        % abort if step is not valid
+        % check if step is not valid
         isValidStep = step.validateDependencies(obj.WorkspacePath);
         if ~isValidStep
+          % if not valid check if step is optional, otherwise abort
           if ~optional
             success = false;
             % prepare execution results
@@ -194,7 +203,7 @@ classdef Sequence
             return
           % warn for optional steps
           else
-            warning('skipping optional step %d', i)
+            warning('ignoring optional step %d after caught error: step %d is not valid', i, i);
           end
         end
 
@@ -202,8 +211,7 @@ classdef Sequence
         [status, result] = step.run(obj.WorkspacePath);
         obj.Results{i} = result;
 
-        % if a step does not succeed, abort
-        % todo: have "optional" steps
+        % check if a step did not succeed, abort
         if status ~= 0
           if ~optional
             success = false;
@@ -221,7 +229,11 @@ classdef Sequence
             sequenceExecution.Error = err;
             return
           else
-            warning('skipping optional step %d', i)
+            warning('ignoring optional step %d after caught error: step %d failed with status %d and message "%s"\n', ...
+                    i, ...      
+                    i, ...
+                    status, ...
+                    result);
           end
         end
       end
