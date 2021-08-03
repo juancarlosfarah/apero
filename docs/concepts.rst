@@ -47,10 +47,10 @@ Steps
 
 A step is the smallest processing unit in our toolkit. It consists primarily of:
 
-* One operation: a lambda function to be called at runtime.
-* Zero or more dependencies: files required to run the operation.
-* Zero or more outputs: used to check for “clobbering”.
-* Structs containing parameters and configuration options.
+- One operation: a lambda function to be called at runtime.
+- Zero or more dependencies: files required to run the operation.
+- Zero or more outputs: used to check for “clobbering”.
+- Structs containing parameters and configuration options.
 
 Before running the operation, the presence of dependencies and outputs is checked.
 
@@ -60,9 +60,9 @@ Sequences
 A sequence consists of steps to be executed to produce a set of outputs given a
 set of inputs. Its main components are:
 
-* A set of steps to execute.
-* A set of inputs to copy into the workspace.
-* A set of outputs to extract from the workspace.
+- A set of steps to execute.
+- A set of inputs to copy into the workspace.
+- A set of outputs to extract from the workspace.
 
 All steps are executed in the same workspace. Outputs are extracted to a
 specified path and the workspace is (optionally) cleared.
@@ -108,10 +108,10 @@ the core of the toolkit's extensibility and here is where end users come in.
 Builders can be created at different levels to factor out logic and make code
 reusable.
 
-* **Step Builders:** Help create reusable steps.
-* **Sequence Builders:** Bring together steps to create sequences.
-* **Pipeline Builders:** Allow users to build full reusable pipelines.
-* **Configuration Builders:** Easily modify how pipelines, sequences, and steps are run.
+- **Step Builders:** Help create reusable steps.
+- **Sequence Builders:** Bring together steps to create sequences.
+- **Pipeline Builders:** Allow users to build full reusable pipelines.
+- **Configuration Builders:** Easily modify how pipelines, sequences, and steps are run.
 
 Builders can also be shared back with the community, so feel free to send a pull
 request if you write a builder that you think might be useful!
@@ -122,8 +122,8 @@ Executions
 Some *Apéro* building blocks have an *execution* equivalent that optionally
 stores the results of an execution.
 
-* ``StepExecution``
-* ``SequenceExecution``
-* ``PipelineExecution``
+- ``StepExecution``
+- ``SequenceExecution``
+- ``PipelineExecution``
 
 They also capture metadata such as errors and duration.
