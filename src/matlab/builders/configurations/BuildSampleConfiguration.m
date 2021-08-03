@@ -133,7 +133,17 @@ pipeline3.step3.optional = true;
 pipeline3.step3.verbose = pipeline3.verbose;
 
 % step 4: binarize
+pipeline3.step4.skip = false;
+pipeline3.step4.optional = true;
 pipeline3.step4.verbose = pipeline3.verbose;
+
+% step 5: apply mask
+pipeline3.step5.optional = true;
+pipeline3.step5.verbose = pipeline3.verbose;
+
+% step 6: apply mask
+pipeline3.step6.verbose = pipeline3.verbose;
+
 
 
 %% prepare fmri configuration object
