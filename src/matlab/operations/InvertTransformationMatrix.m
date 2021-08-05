@@ -23,8 +23,8 @@ end
 fullInputMatrix = fullfile(pathToWorkspace, params.inputMatrix);
 fullOutputMatrix = fullfile(pathToWorkspace, params.outputMatrix);
 
-command = 'convert_xfm -inverse %s -omat %s';
-sentence = sprintf(command, fullInputMatrix, fullOutputMatrix);
+command = 'convert_xfm -omat %s -inverse %s';
+sentence = sprintf(command, fullOutputMatrix, fullInputMatrix);
 [status, result] = CallSystem(sentence, config.verbose);
 
 end

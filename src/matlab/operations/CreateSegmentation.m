@@ -42,10 +42,6 @@ arguments
   config.out char
   % segmentation spatial smoothness
   config.H double {mustBeInRange(config.H, 0, 1)} = 0.1
-  % optional
-  config.optional logical = false
-  % clobber previous output
-  config.clobber logical = false
   % switch on diagnostic messages
   config.verbose logical = false
   config.v logical = false

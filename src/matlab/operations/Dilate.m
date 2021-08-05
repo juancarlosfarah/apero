@@ -1,8 +1,8 @@
 function [status, result] = Dilate(pathToWorkspace, ...
                                    params, ...
                                    config)
-%DILATE Invert a non-linear mapping.
-%   Uses `invwarp` to invert a non-linear mapping.
+%DILATE Dilate a volume one or more times.
+%   Uses `fslmaths` to dilate a volume.
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
@@ -12,13 +12,6 @@ function [status, result] = Dilate(pathToWorkspace, ...
 %   Output:
 %   - status:  Status returned by system call.
 %   - result:  Result returned by system call.
-%
-% TODO:
-% 	--rel	use relative warp convention: x' = x + w(x)
-% 	--abs	use absolute warp convention (default): x' = w(x)
-% 	--noconstraint	do not apply the Jacobian constraint
-% 	--jmin	minimum acceptable Jacobian value for constraint (default 0.01)
-% 	--jmax	maximum acceptable Jacobian value for constraint (default 100.0)
 
 arguments
   pathToWorkspace char = '.'

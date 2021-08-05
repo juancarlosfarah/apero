@@ -19,10 +19,6 @@ arguments
   params.inputVolume char
   % filename of output image
   params.outputVolume char
-  % optional step
-  config.optional logical = false
-  % clobber previous output
-  config.clobber logical = false
   % switch on diagnostic messages
   config.verbose logical = false
   config.v logical = false

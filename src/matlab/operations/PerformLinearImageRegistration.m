@@ -93,9 +93,13 @@ arguments
     'labeldiff', ...
     'bbr' ...
   })} = 'corratio'
+  % switch on diagnostic messages
   config.verbose logical = false
   config.v logical = false
 end
+
+% normalize if multiple options mean the same thing
+verbose = config.verbose || config.v;
 
 %% main command
 fullInputVolume = fullfile(pathToWorkspace, params.inputVolume);
@@ -159,12 +163,12 @@ if config.nosearch
 end
 
 % verbose (switch on diagnostic messages)
-if config.verbose || config.v
+if verbose
   command = sprintf('%s -v', command);
 end
 
 %% execute
-[status, result] = CallSystem(command, config.verbose);
+[status, result] = CallSystem(command, verbose);
 
 end
 
