@@ -1,12 +1,12 @@
 function [config] = BuildSampleConfiguration()
-%BUILDSAMPLECONFIGURATION Summary of this function goes here
-%   Detailed explanation goes here
+%BUILDSAMPLECONFIGURATION Builds configuration for pipeline.
+%   Builds a configuration for a sample pipeline.
 %
 %   Input:
-%   - config: Base configuration.
+%   - ...
 %
 %   Output:
-%   - config: Configuiration.
+%   - config: Configuration.
 
 
 config = {};
@@ -47,8 +47,7 @@ pipeline1.step3.optional = true;
 % step configurations can also inherit from the sequence configurations
 pipeline1.step3.verbose = pipeline1.verbose;
 
-% you can also order this by pipeline / step
-%% pipeline 2: register parcellations
+%% pipeline 2: register to standard
 pipeline2 = {};
 pipeline2.verbose = common.verbose;
 pipeline2.pathToOutput = fullfile(pathToDataFolder, 'o2');
@@ -57,7 +56,7 @@ pipeline2.step1.dof = 6;
 pipeline2.step1.interp = 'spline';
 pipeline2.step1.optional = true;
 pipeline2.step1.verbose = pipeline2.verbose;
-% step 2: flirt 
+% step 2: flirt
 pipeline2.step2.dof = 6;
 pipeline2.step2.applyxfm = true;
 pipeline2.step2.nosearch = true;
@@ -141,10 +140,36 @@ pipeline3.step4.verbose = pipeline3.verbose;
 pipeline3.step5.optional = true;
 pipeline3.step5.verbose = pipeline3.verbose;
 
-% step 6: apply mask
+% step 6: invert subcortical mask
+pipeline3.step6.optional = true;
 pipeline3.step6.verbose = pipeline3.verbose;
 
+% step 7: multiply segmented brain by inverted subcortical mask
+pipeline3.step7.skip = true;
+pipeline3.step7.verbose = pipeline3.verbose;
 
+% step 8: tag subcortical mask as gray matter
+pipeline3.step8.skip = true;
+pipeline3.step8.verbose = pipeline3.verbose;
+
+% step 9: add subcortical mask back to segmented brain
+pipeline3.step9.skip = true;
+
+% step 10: create tissue type masks
+pipeline3.step10.skip = true;
+
+% step 11: dilate wm mask
+pipeline3.step11.skip = true;
+
+% step 12: dilate csf mask
+pipeline3.step12.skip = true;
+
+% step 13: combine wm and csf mask
+pipeline3.step13.skip = true;
+
+% step 14: threshold wm and csf mask to keep intersect
+pipeline3.step14 = struct(); %.skip = true;
+pipeline3.step14.thr = 2;
 
 %% prepare fmri configuration object
 %
@@ -159,7 +184,7 @@ pipeline3.step6.verbose = pipeline3.verbose;
 % fmri.fMin = .01; % MIPLAB configs
 % fmri.fMax = .25; % task bandpass
 % fmri.fhwm = 0; % Full Width at Half Maximum of the Gaussian kernel
-% 
+%
 % config.fmri = fmri;
 
 config.pipeline1 = pipeline1;
