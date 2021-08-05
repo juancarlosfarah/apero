@@ -1,12 +1,15 @@
 classdef Step
   %STEP Summary of this class goes here
   %   Detailed explanation goes here
+  properties(Constant)
+    StepPropertyNames = {'skip', 'clobber', 'optional'}
+  end
 
   properties
     Operation
     Parameters = {}
     Dependencies = {}
-    Configuration = {}
+    Configuration = struct()
     Outputs = {}
   end
 
@@ -16,16 +19,37 @@ classdef Step
       %   Detailed explanation goes here
       arguments
         op
-        params = {}
+        params = struct()
         deps = {}
-        config = {}
+        config = struct()
         outputs = {}
       end
 
       obj.Operation = op;
-      obj.Parameters = params;
+
+      % default to empty struct if empty cell array is passed
+      if isempty(params)
+        obj.Parameters = struct();
+      else
+        obj.Parameters = params;
+      end
+
+      % default to empty struct if empty cell array is passed
+      if isempty(config)
+        obj.Configuration = struct();
+      else
+        obj.Configuration = config;
+      end
+
+      % add default config options
+      if ~isfield(obj.Configuration, 'skip')
+         obj.Configuration.skip = false;
+      end
+      if ~isfield(obj.Configuration, 'clobber')
+         obj.Configuration.clobber = false;
+      end
+
       obj.Dependencies = deps;
-      obj.Configuration = config;
       obj.Outputs = outputs;
     end
 
@@ -64,6 +88,12 @@ classdef Step
       err = false;
     end
 
+    function [config] = getOperationConfiguration(obj)
+      %GETOPERATIONCONFIGURATION Returns configuration to be passed to operation.
+      %   Removes properties only used by the Step class.
+      config = rmfield(obj.Configuration, obj.StepPropertyNames);
+    end
+
     function [status, output] = run(obj, pathToWorkspace)
       %RUN Summary of this method goes here
       %   Detailed explanation goes here
@@ -78,7 +108,7 @@ classdef Step
       % check if we need to clobber any outputs
       clobber = isfield(obj.Configuration, 'clobber') && ...
                 obj.Configuration.clobber == true;
-      
+
       % if the clobber flag is not set, then we need to check for the
       % presence of outputs that may be clobbered if we run
       if ~clobber
@@ -102,7 +132,7 @@ classdef Step
       % check if we are clobbering outputs
       % need to convert struct to name-value paired arguments
       params = namedargs2cell(obj.Parameters);
-      config = namedargs2cell(obj.Configuration);
+      config = namedargs2cell(obj.getOperationConfiguration());
       % status = 0 signals everything went fine
       % if operation fails, returns a nonzero value in
       % status and an explanatory message in result
