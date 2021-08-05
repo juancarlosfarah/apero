@@ -48,6 +48,9 @@ classdef Step
       if ~isfield(obj.Configuration, 'clobber')
          obj.Configuration.clobber = false;
       end
+      if ~isfield(obj.Configuration, 'optional')
+         obj.Configuration.optional = false;
+      end
 
       obj.Dependencies = deps;
       obj.Outputs = outputs;
