@@ -1,8 +1,8 @@
-function [status, result] = ThresholdImage(pathToWorkspace, ...
-                                           params, ...
-                                           config)
-%THRESHOLDIMAGE Threshold an image.
-%   Uses `fslmaths` to threshold an image.
+function [status, result] = ThresholdVolume(pathToWorkspace, ...
+                                            params, ...
+                                            config)
+%THRESHOLDVOLUME Threshold a volume.
+%   Uses `fslmaths` to threshold an volume.
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
@@ -29,10 +29,6 @@ arguments
   config.thr double
   % zero anything above the number
   config.uthr double
-  % optional step
-  config.optional logical = false
-  % clobber previous output
-  config.clobber logical = false
   % switch on diagnostic messages
   config.verbose logical = false
   config.v logical = false
@@ -48,12 +44,12 @@ command = sprintf(command, fullInputVolume);
 
 %% options
 % zero anything below the number
-if config.thr
+if isfield(config, 'thr')
   command = sprintf('%s -thr %.4f', command, config.thr);
 end
 
 % zero anything above the number
-if config.uthr
+if isfield(config, 'uthr')
   command = sprintf('%s -uthr %.4f', command, config.uthr);
 end
 
