@@ -59,12 +59,12 @@ step4 = Step(@FillMask, step4Params, deps, step4Config);
 % extra step to be very precise on the extraction
 step5Params = {};
 step5Config = {};
-step5Params.inputFile1 = sprintf('%s_T1w_denoised.anat/T1_biascorr.nii.gz', subjectName);
-step5Params.inputFile2 = sprintf('%s_T1w_brain_mask_filled.nii.gz', subjectName);
-step5Params.outputFile = sprintf('%s_T1w_brain_mul.nii.gz', subjectName);
+step5Params.inputVolume1 = sprintf('%s_T1w_denoised.anat/T1_biascorr.nii.gz', subjectName);
+step5Params.inputVolume2 = sprintf('%s_T1w_brain_mask_filled.nii.gz', subjectName);
+step5Params.outputVolume = sprintf('%s_T1w_brain_mul.nii.gz', subjectName);
 step5Config.verbose = config.verbose;
-deps = { step5Params.inputFile1, step5Params.inputFile2 };
-step5 = Step(@MultiplyImages, step5Params, deps, step5Config);
+deps = { step5Params.inputVolume1, step5Params.inputVolume2 };
+step5 = Step(@MultiplyVolumes, step5Params, deps, step5Config);
 
 % set up steps in order
 steps = { step1, step2, step3, step4, step5 };
