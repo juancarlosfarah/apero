@@ -80,7 +80,7 @@ step4Config = config.step4;
 step4Params.inputVolume = step3Params.outputVolume;
 step4Params.referenceVolume = sprintf('%s_T1w_brain_mul.nii.gz', subjectName);
 step4Params.initMatrix = sprintf('%s_MNI2T1w_dof6.mat', subjectName);
-step4Params.outputVolume = sprintf('%s_registered.nii.gz', parcellationName);
+step4Params.outputVolume = sprintf('%s_%s.nii.gz', parcellationName, subjectName);
 deps4 = { step4Params.inputVolume, ...
           step4Params.referenceVolume,  ...
           step4Params.initMatrix };
