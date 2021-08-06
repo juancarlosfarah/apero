@@ -12,4 +12,9 @@ Apéro to make this process easier and to promote reliable preprocessing pipelin
 that can help make research reproducible. This work builds on the preprocessing
 pipeline used in [Amico et al., NeuroImage (2017)](https://doi.org/10.1016/j.neuroimage.2017.01.020).
 
+## Contributors
+
+Juan Carlos Farah
+Enrico Amico
+Hanna Tolle
 
