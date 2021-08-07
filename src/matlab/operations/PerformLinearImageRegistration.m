@@ -20,10 +20,7 @@ function [status, result] = PerformLinearImageRegistration(pathToWorkspace, ...
 %        flirt [options] -in <inputvol> -ref <refvol> -omat <outputmatrix>
 %        flirt [options] -in <inputvol> -ref <refvol> -applyxfm -init <matrix> -out <outputvol>
 % 
-%   Available options are:
-%         -in  <inputvol>                    (no default)
-%         -ref <refvol>                      (no default)
-%         -out, -o <outputvol>               (default is none)
+% TODO:
 %         -datatype {char,short,int,float,double}                    (force output data type)
 %         -searchcost {mutualinfo,corratio,normcorr,normmi,leastsq,labeldiff,bbr}  (default is corratio)
 %         -usesqform                         (initialise using appropriate sform or qform)

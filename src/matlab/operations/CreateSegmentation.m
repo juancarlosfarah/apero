@@ -24,7 +24,6 @@ function [status, result] = CreateSegmentation(pathToWorkspace, ...
 % 	-A <prior1> <prior2> <prior3>    alternative prior images
 % 	--nopve	turn off PVE (partial volume estimation)
 % 	-b		output estimated bias field
-% 	-B		output bias-corrected image
 % 	-N,--nobias	do not remove bias field
 % 	-S,--channels	number of input images (channels); default 1
 % 	-P,--Prior	use priors throughout; you must also set the -a option
@@ -42,6 +41,8 @@ arguments
   config.out char
   % segmentation spatial smoothness
   config.H double {mustBeInRange(config.H, 0, 1)} = 0.1
+  % output bias-corrected image
+  config.B logical = false
   % switch on diagnostic messages
   config.verbose logical = false
   config.v logical = false
@@ -63,6 +64,11 @@ end
 % segmentation spatial smoothness
 if config.H
   command = sprintf('%s -H %.4f', command, config.H);
+end
+
+% output bias-corrected image
+if config.B
+  command = sprintf('%s -B', command);
 end
 
 % verbose (switch on diagnostic messages)
