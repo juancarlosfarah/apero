@@ -14,7 +14,6 @@ function [status, result] = CreateSegmentation(pathToWorkspace, ...
 %   - result:  Result returned by system call.
 %
 %  TODO:
-% 	-n,--class	number of tissue-type classes; default=3
 % 	-I,--iter	number of main-loop iterations during bias-field removal; default=4
 % 	-l,--lowpass	bias field smoothing extent (FWHM) in mm; default=20
 % 	-t,--type	type of image 1=T1, 2=T2, 3=PD; default=T1
@@ -39,6 +38,8 @@ arguments
   params.inputVolume char
   % output basename
   config.out char
+  % number of tissue-type classes
+  config.n int8 {mustBeNonnegative} = 3
   % segmentation spatial smoothness
   config.H double {mustBeInRange(config.H, 0, 1)} = 0.1
   % output bias-corrected image
@@ -59,6 +60,11 @@ command = 'fast';
 % output basename
 if config.out
   command = sprintf('%s --out=%s', command, config.out);
+end
+
+% number of tissue-type classes
+if config.n
+  command = sprintf('%s -n %d', command, config.n);
 end
 
 % segmentation spatial smoothness
