@@ -62,10 +62,8 @@ if config.out
   command = sprintf('%s --out=%s', command, config.out);
 end
 
-% number of tissue-type classes
-if config.n
-  command = sprintf('%s -n %d', command, config.n);
-end
+% number of tissue-type classes (default = 3)
+command = sprintf('%s -n %d', command, config.n);
 
 % segmentation spatial smoothness
 if config.H
