@@ -16,7 +16,6 @@ function [status, result] = CreateSegmentation(pathToWorkspace, ...
 %  TODO:
 % 	-I,--iter	number of main-loop iterations during bias-field removal; default=4
 % 	-l,--lowpass	bias field smoothing extent (FWHM) in mm; default=20
-% 	-t,--type	type of image 1=T1, 2=T2, 3=PD; default=T1
 % 	-f,--fHard	initial segmentation spatial smoothness (during bias field estimation); default=0.02
 % 	-g,--segments	outputs a separate binary image for each tissue type
 % 	-a <standard2input.mat> initialise using priors; you must supply a FLIRT transform
@@ -38,6 +37,8 @@ arguments
   params.inputVolume char
   % output basename
   config.out char
+  % type of image 1=T1, 2=T2, 3=PD
+  config.t int8 {mustBeInRange(config.t, 1, 3)} = 1
   % number of tissue-type classes
   config.n int8 {mustBeNonnegative} = 3
   % segmentation spatial smoothness
@@ -61,6 +62,9 @@ command = 'fast';
 if isfield(config, 'out')
   command = sprintf('%s --out=%s', command, config.out);
 end
+
+% type of image
+command = sprintf('%s -t %d', command, config.t);
 
 % number of tissue-type classes (default = 3)
 command = sprintf('%s -n %d', command, config.n);
