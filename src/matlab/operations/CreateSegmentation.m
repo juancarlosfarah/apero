@@ -58,7 +58,7 @@ command = 'fast';
 
 %% options
 % output basename
-if config.out
+if isfield(config, 'out')
   command = sprintf('%s --out=%s', command, config.out);
 end
 
