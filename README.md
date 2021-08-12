@@ -1,9 +1,10 @@
 # Apéro
 
-A Preprocessing Pipeline Builder for Neuroimaging Data
-
 [![Documentation Status](https://readthedocs.org/projects/apero/badge/?version=latest)](https://apero.readthedocs.io/en/latest/?badge=latest)
+[![Conventional Commits](https://img.shields.io/badge/conventional%20commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
+A Preprocessing Pipeline Builder for Neuroimaging Data
 
 ## Motivation 
 
