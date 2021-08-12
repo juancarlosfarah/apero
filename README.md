@@ -14,7 +14,7 @@ pipeline used in [Amico et al., NeuroImage (2017)](https://doi.org/10.1016/j.neu
 
 ## Contributors
 
-Juan Carlos Farah
-Enrico Amico
-Hanna Tolle
+- Juan Carlos Farah
+- Enrico Amico
+- Hanna Tolle
 
