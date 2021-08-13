@@ -18,7 +18,7 @@ arguments
   pathToWorkspace char = '.'
   % filename of input image (to be masked)
   params.inputVolume char
-  config.tissueTypeLabels cell = { 'csf', 'wm', 'gm' }
+  config.tissueTypeLabels cell = { 'csf', 'gm', 'wm' }
   config.startTypeValue int8 {mustBePositive} = 1
   config.endTypeValue int8 {mustBePositive} = 3
   % switch on diagnostic messages
