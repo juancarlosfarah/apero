@@ -16,9 +16,9 @@ function [sequence] = BuildRegisterToStandardSequence(inputs, ...
 %   - sequence:  Built sequence.
 
 %% step 1
-% do a dof 6 linear registration of the brain image output in the previous
+% dof 6 linear registration of the brain volume output in the previous
 % pipeline
-step1Params = {};
+step1Params = struct();
 step1Config = config.step1;
 step1Params.inputVolume = sprintf('%s_T1w_brain_mul.nii.gz', subjectName);
 step1Params.referenceVolume = 'ch2bet.nii.gz';
@@ -35,7 +35,7 @@ step1 = Step(@PerformLinearImageRegistration, ...
 
 %% step 2
 % apply the result of step 1 dof 6 to original t1 input file
-step2Params = {};
+step2Params = struct();
 step2Config = config.step2;
 step2Params.inputVolume = sprintf('%s_T1w.nii.gz', subjectName);
 step2Params.referenceVolume = 'ch2bet.nii.gz';
@@ -54,7 +54,7 @@ step2 = Step(@PerformLinearImageRegistration, ...
 
 %% step 3
 % find inverse matrix of transformation dof 6 matrix
-step3Params = {};
+step3Params = struct();
 step3Config = config.step3;
 step3Params.inputMatrix = sprintf('%s_T1w2MNI_dof6.mat', subjectName);
 step3Params.outputMatrix = sprintf('%s_MNI2T1w_dof6.mat', subjectName);
@@ -68,11 +68,10 @@ step3 = Step(@InvertTransformationMatrix, ...
 
 
 %% step 4
-% do a dof 12 linear registration of the brain image output in the previous
-% pipeline
-step4Params = {};
+% do a dof 12 linear registration of the dof 6 brain volume
+step4Params = struct();
 step4Config = config.step4;
-step4Params.inputVolume = sprintf('%s_T1w_brain_mul.nii.gz', subjectName);
+step4Params.inputVolume = sprintf('%s_T1w_brain_dof6.nii.gz', subjectName);
 step4Params.referenceVolume = 'ch2bet.nii.gz';
 step4Params.outputVolume = sprintf('%s_T1w_brain_dof12.nii.gz', subjectName);
 step4Params.outputMatrix = sprintf('%s_T1w2MNI_dof12.mat', subjectName);
@@ -86,10 +85,10 @@ step4 = Step(@PerformLinearImageRegistration, ...
 
 
 %% step 5
-% apply the result of step 4 dof 12 to original t1 input file
-step5Params = {};
+% apply the result of step 4 dof 12 to the dof 6 t1 volume
+step5Params = struct();
 step5Config = config.step5;
-step5Params.inputVolume = sprintf('%s_T1w.nii.gz', subjectName);
+step5Params.inputVolume = sprintf('%s_T1w_dof6.nii.gz', subjectName);
 step5Params.referenceVolume = 'ch2bet.nii.gz';
 step5Params.outputVolume = sprintf('%s_T1w_dof12.nii.gz', subjectName);
 step5Params.initMatrix = sprintf('%s_T1w2MNI_dof12.mat', subjectName);
@@ -105,7 +104,7 @@ step5 = Step(@PerformLinearImageRegistration, ...
 
 %% step 6
 % find inverse matrix of transformation dof 12 matrix
-step6Params = {};
+step6Params = struct();
 step6Config = config.step6;
 step6Params.inputMatrix = sprintf('%s_T1w2MNI_dof12.mat', subjectName);
 step6Params.outputMatrix = sprintf('%s_MNI2T1w_dof12.mat', subjectName);
@@ -118,8 +117,8 @@ step6 = Step(@InvertTransformationMatrix, ...
              outputs6);
 
 %% step 7
-% fnirt
-step7Params = {};
+% non-linear registration of the dof 12 t1 volume
+step7Params = struct();
 step7Config = config.step7;
 step7Params.inputImage = sprintf('%s_T1w_dof12.nii.gz', subjectName);
 step7Params.referenceImage = 'ch2.nii.gz';
@@ -135,7 +134,7 @@ step7 = Step(@PerformNonLinearImageRegistration, ...
 
 %% step 8
 % invwarp
-step8Params = {};
+step8Params = struct();
 step8Config = config.step8;
 step8Params.warpVolume = sprintf('%s_T1w2MNI_warp.nii.gz', subjectName);
 step8Params.referenceVolume = sprintf('%s_T1w_dof12.nii.gz', subjectName);
