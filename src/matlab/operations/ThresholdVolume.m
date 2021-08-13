@@ -26,8 +26,10 @@ arguments
   % filename of output image
   params.outputVolume char
   % zero anything below the number
+	% e.g. thr = 2 will zero values 1, 0, and under
   config.thr double
   % zero anything above the number
+	% e.g. uthr = 3 will zero values 4, 5, and above
   config.uthr double
   % switch on diagnostic messages
   config.verbose logical = false
