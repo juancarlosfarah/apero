@@ -34,7 +34,7 @@ success = true;
 
 fullInputVolume = fullfile(pathToWorkspace, params.inputVolume);
 fullOutputVolume = fullfile(pathToWorkspace, params.outputVolume);
-results = cell(1, config.numDilations);
+results = cell(1, config.numErosions);
 verbose = config.verbose || config.v;
 
 % main command
