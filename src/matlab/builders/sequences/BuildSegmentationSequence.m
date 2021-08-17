@@ -7,7 +7,7 @@ function [sequence] = BuildSegmentationSequence(parcellation, ...
 %BUILDSEGMENTATIONSEQUENCE Example of a sequence builder.
 %   This builder creates the typical sequence to perform the segmentation
 %   of a T1w image.
-%   
+%
 %   Input:
 %   - inputs:           Inputs that will be copied into the workspace.
 %   - pathToWorkspace:  Path to the sequence's workspace.
@@ -92,11 +92,11 @@ step5 = Step(@ApplyMask, ...
 
 
 %% step 6
-% invert subcortical mask
+% invert subcortical mask w/o csf
 step6Params = struct();
 step6Config = config.step6;
 % subcortical w/o csf mask
-step6Params.inputVolume = step4Params.outputVolume;
+step6Params.inputVolume = step5Params.outputVolume;
 step6Params.outputVolume = 'T1_subcort_mask_wo_csf_inv.nii.gz';
 deps6 = { step6Params.inputVolume };
 outputs6 = { step6Params.outputVolume };
@@ -129,7 +129,7 @@ step7 = Step(@MultiplyVolumes, ...
 step8Params = struct();
 step8Config = config.step8;
 % subcortical w/o csf mask
-step8Params.inputVolume = step4Params.outputVolume;
+step8Params.inputVolume = step5Params.outputVolume;
 step8Params.factor = 2;
 step8Params.outputVolume = 'T1_subcort_mask_gm.nii.gz';
 deps8 = { step8Params.inputVolume };
@@ -295,7 +295,7 @@ step18 = Step(@Erode, ...
               deps18, ...
               step18Config, ...
               outputs18);
-            
+
 %% step 19
 % erode the csf mask's outer parts to be sure that it is csf
 step19Params = struct();
@@ -311,7 +311,7 @@ step19 = Step(@Erode, ...
               outputs19);
 
 %% step 20
-% apply ventricles mask to eroded csf mask 
+% apply ventricles mask to eroded csf mask
 step20Params = struct();
 step20Config = config.step20;
 % eroded csf mask
@@ -360,7 +360,7 @@ step22 = Step(@MultiplyVolumes, ...
               deps22, ...
               step22Config, ...
               outputs22);
-            
+
 %% prepare the sequence
 % set up steps in order
 steps = { step1, ...
