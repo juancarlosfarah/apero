@@ -8,9 +8,9 @@ classdef Sequence
     Outputs
     WorkspacePath
     OutputPath
-    NoCleanUp
     Results
     Ready
+    Configuration
   end
 
   methods
@@ -19,17 +19,42 @@ classdef Sequence
                             outputs, ...
                             workspacePath, ...
                             outputPath, ...
-                            noCleanUp)
+                            config)
       %SEQUENCE Construct an instance of this class
       %   Detailed explanation goes here
+      arguments
+        steps
+        inputs
+        outputs
+        workspacePath
+        outputPath
+        config
+      end
+
+      % default to empty struct if empty cell array is passed
+      if isempty(config)
+        obj.Configuration = struct();
+      else
+        obj.Configuration = config;
+      end
+
+      % add default config options
+      if ~isfield(obj.Configuration, 'noCleanUp')
+         obj.Configuration.noCleanUp = false;
+      end
+      if ~isfield(obj.Configuration, 'startStep')
+         obj.Configuration.startStep = 1;
+      end
+
+
       obj.Steps = steps;
       obj.Inputs = inputs;
       obj.Outputs = outputs;
       obj.WorkspacePath = workspacePath;
       obj.OutputPath = outputPath;
-      obj.NoCleanUp = noCleanUp;
       obj.Results = cell(1, length(steps));
       obj.Ready = false;
+      obj.Configuration = config;
     end
 
     function isValid = validate(obj)
@@ -86,7 +111,7 @@ classdef Sequence
 
     function [obj, success] = cleanUp(obj)
       success = true;
-      if obj.NoCleanUp
+      if obj.Configuration.noCleanUp
         return
       end
       % remove the workspace
@@ -174,14 +199,21 @@ classdef Sequence
       for i = 1 : length(obj.Steps)
         step = obj.Steps{i};
 
-        % check if we are skipping this step
+        % check if we are skipping this step using start step
+        startStep = obj.Configuration.startStep;
+        if i < obj.Configuration.startStep
+          warning('start step is %d, skipping step %d', startStep, i);
+          continue;
+        end
+
+        % check if we are skipping this step manually
         skip = isfield(step.Configuration, 'skip') && ...
                        step.Configuration.skip == true;
         if skip
           warning('skipping step %d', i)
           continue;
         end
-        
+
         % check if step is optional
         optional = isfield(step.Configuration, 'optional') && ...
                            step.Configuration.optional == true;
@@ -230,7 +262,7 @@ classdef Sequence
             return
           else
             warning('ignoring optional step %d after caught error: step %d failed with status %d and message "%s"\n', ...
-                    i, ...      
+                    i, ...
                     i, ...
                     status, ...
                     result);
@@ -242,13 +274,13 @@ classdef Sequence
 
       % extract outputs
       extractOutputsSuccess = obj.extractOutputs();
-      
+
       if ~extractOutputsSuccess
         success = false;
       end
 
       % clean up
-      if ~obj.NoCleanUp
+      if ~obj.Configuration.noCleanUp
         [~, cleanUpSuccess] = obj.cleanUp();
         if ~cleanUpSuccess
           success = false;

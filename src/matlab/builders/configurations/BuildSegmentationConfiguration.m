@@ -32,6 +32,10 @@ config.numSubjects = 1;
 config.parcellation = 'schaefer_2018_400_subc';
 config.parallel = false;
 
+% sequence level configurations
+config.sequence.startStep = 6;
+config.sequence.noCleanUp = true;
+
 
 % step 1: fast
 config.step1.H = 0.25;
@@ -56,7 +60,7 @@ config.step3.verbose = config.verbose;
 
 % step 4: binarize
 config.step4.skip = false;
-config.step4.optional = true;
+config.step4.optional = false;
 config.step4.clobber = config.clobber;
 config.step4.verbose = config.verbose;
 

@@ -24,7 +24,7 @@ arguments
   pathToIntermediaryOutputs char = '.'
   pathToOutput char = '.'
   numSubjects int8 {mustBeNonnegative} = 0
-  config = {}
+  config = struct()
 end
 
 % names of inputs needed to start the sequence
