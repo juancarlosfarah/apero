@@ -15,10 +15,11 @@ function [status, result] = ExtractBrain(pathToWorkspace, ...
 
 arguments
   pathToWorkspace char = '.'
-  params.inputFile char
-  params.outputFile char
+  params.inputVolume char
+  params.outputVolume char
   % variations on default bet2 functionality (mutually exclusive options):
   config.type char {mustBeMember(config.type, { ...
+    '', ...  % just run bet2
     'R', ... % robust brain centre estimation (iterates BET several times)
     'S', ... % eye & optic nerve cleanup (can be useful in SIENA - disables -o option)
     'B', ... % bias field & neck cleanup (can be useful in SIENA)    
@@ -57,10 +58,10 @@ verbose = config.verbose || config.v;
 dbg = config.debug || config.d;
 
 %% main command
-fullInputFile = fullfile(pathToWorkspace, params.inputFile);
-fullOutputFile = fullfile(pathToWorkspace, params.outputFile);
+fullInputVolume = fullfile(pathToWorkspace, params.inputVolume);
+fullOutputVolume = fullfile(pathToWorkspace, params.outputVolume);
 command = 'bet %s %s';
-command = sprintf(command, fullInputFile, fullOutputFile);
+command = sprintf(command, fullInputVolume, fullOutputVolume);
 
 %% type
 % select main type of extraction (mutually exclusive options)
