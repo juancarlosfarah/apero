@@ -1,7 +1,7 @@
 function [status, result] = ReorientToStandard(pathToWorkspace, ...
                                                params, ...
                                                config)
-%REORIENTTOSTANDARD Add two volumes.
+%REORIENTTOSTANDARD Reorient a volume to match MNI152.
 %   Uses `fslreorient2std` to reorient a volume.
 %
 %   Reorients the image to match the approximate orientation of the
