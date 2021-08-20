@@ -42,9 +42,6 @@ function [status, result] = PerformLinearImageRegistration(pathToWorkspace, ...
 %         -schedule <schedule-file>          (replaces default schedule)
 %         -refweight <volume>                (use weights for reference volume)
 %         -inweight <volume>                 (use weights for input volume)
-%         -wmseg <volume>                    (white matter segmentation volume needed by BBR cost function)
-%         -wmcoords <text matrix>            (white matter boundary coordinates for BBR cost function)
-%         -wmnorms <text matrix>             (white matter boundary normals for BBR cost function)
 %         -fieldmap <volume>                 (fieldmap image in rads/s - must be already registered to the reference image)
 %         -fieldmapmask <volume>             (mask for fieldmap image)
 %         -pedir <index>                     (phase encode direction of EPI - 1/2/3=x/y/z & -1/-2/-3=-x/-y/-z)
@@ -56,8 +53,6 @@ function [status, result] = PerformLinearImageRegistration(pathToWorkspace, ...
 %         -noresampblur                      (do not use blurring on downsampling)
 %         -2D                                (use 2D rigid body mode - ignores dof)
 %         -i                                 (pauses at each stage: default is off)
-%         -version                           (prints version number)
-%         -help
 
 arguments
   pathToWorkspace char = '.'
@@ -90,6 +85,12 @@ arguments
     'labeldiff', ...
     'bbr' ...
   })} = 'corratio'
+  % white matter segmentation volume needed by BBR cost function
+  config.wmseg char
+  % white matter boundary coordinates for BBR cost function
+  config.wmcoords char
+  % white matter boundary normals for BBR cost function
+  config.wmnorms char
   % switch on diagnostic messages
   config.verbose logical = false
   config.v logical = false
@@ -135,16 +136,14 @@ if config.interp
 end
 
 % cost function
-if config.cost
-  command = sprintf('%s -cost %s', command, config.cost);
-end
+command = sprintf('%s -cost %s', command, config.cost);
 
 % applies transform (no optimisation)
 if config.applyxfm
   % requires init
-  if ~params.initMatrix
+  if isempty(params.initMatrix)
     % todo: throw error
-    error = 'PerformLinearImageRegistration: applyxfm requires initMatrix parameter';
+    error = 'PerformLinearImageRegistration: applyxfm requires initMatrix parameter\n';
     fprintf(error);
     % signals error
     status = 1;
@@ -152,6 +151,35 @@ if config.applyxfm
     return
   end
   command = sprintf('%s -applyxfm', command);
+end
+
+% boundary-based registration
+if strcmp(config.cost, 'bbr')
+  % requires wmseg
+  if ~isfield(config, 'wmseg')
+    % todo: throw error
+    error = 'PerformLinearImageRegistration: -cost bbr requires wmseg parameter\n';
+    fprintf(error);
+    % signals error
+    status = 1;
+    result = error;
+    return
+  end
+  % white matter segmentation volume needed by BBR cost function
+  fullWmSeg = fullfile(pathToWorkspace, config.wmseg);
+  command = sprintf('%s -wmseg %s', command, fullWmSeg);
+  
+  % white matter boundary coordinates for BBR cost function
+  if isfield(config, 'wmcoords')
+    fullWmCoords = fullfile(pathToWorkspace, config.wmcoords);
+    command = sprintf('%s -wmcoords %s', command, fullWmCoords);
+  end
+  
+  % white matter boundary normals for BBR cost function
+  if isfield(config, 'wmnorms')
+    fullWmNorms = fullfile(pathToWorkspace, config.wmnorms);
+    command = sprintf('%s -wmnorms %s', command, fullWmNorms);
+  end
 end
 
 % sets all angular search ranges to 0 0
