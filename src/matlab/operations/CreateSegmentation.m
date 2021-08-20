@@ -60,7 +60,8 @@ command = 'fast';
 %% options
 % output basename
 if isfield(config, 'out')
-  command = sprintf('%s --out=%s', command, config.out);
+  fullOutputPrefix = fullfile(pathToWorkspace, config.out);
+  command = sprintf('%s --out=%s', command, fullOutputPrefix);
 end
 
 % type of image
