@@ -54,7 +54,6 @@ classdef Sequence
       obj.OutputPath = outputPath;
       obj.Results = cell(1, length(steps));
       obj.Ready = false;
-      obj.Configuration = config;
     end
 
     function isValid = validate(obj)
