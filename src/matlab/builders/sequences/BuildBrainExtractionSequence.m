@@ -1,4 +1,8 @@
-function [sequence] = BuildBrainExtractionSequence(inputs, subjectName, pathToWorkspace, pathToOutput)
+function [sequence] = BuildBrainExtractionSequence(inputs, ...
+                                                   subjectName, ...
+                                                   pathToWorkspace, ...
+                                                   pathToOutput, ...
+                                                   config)
 %BUILDBRAINEXTRACTIONSEQUENCE Example of a sequence builder for brain extraction.
 %   This sequence builder runs brain extraction of a T1w image.
 %   
@@ -10,55 +14,133 @@ function [sequence] = BuildBrainExtractionSequence(inputs, subjectName, pathToWo
 %   Output:
 %   - sequence:  Built sequence.
 
+
 %% step 1
-% extract brain
-params = {};
-config = {};
-params.inputFile = sprintf('%s_T1w.nii.gz', subjectName);
-params.outputFile = sprintf('%s_T1w_brain.nii.gz', subjectName);
-config.type = 'R';
-config.f = 0.4;
-% creates mask
-config.m = true;
-config.verbose = true;
-deps = { params.inputFile };
-step1 = Step(@ExtractBrain, params, deps, config);
+% reorient to standard
+step1Params = struct();
+step1Config = config.step1;
+step1Params.inputVolume = sprintf('%s_T1w.nii.gz', subjectName);
+step1Params.outputVolume = sprintf('%s_T1w_std.nii.gz', subjectName);
+deps1 = { step1Params.inputVolume };
+outputs1 = { step1Params.outputVolume };
+step1 = Step(@ReorientToStandard, ...
+             step1Params, ...
+             deps1, ...
+             step1Config, ...
+             outputs1);
 
 %% step 2
-% fill mask
-params = {};
-config = {};
-params.inputFile = sprintf('%s_T1w_brain_mask.nii.gz', subjectName);
-params.outputFile = sprintf('%s_T1w_brain_mask_filled.nii.gz', subjectName);
-config.verbose = true;
-deps = { params.inputFile };
-step2 = Step(@FillMask, params, deps, config);
+% crop
+step2Params = struct();
+step2Config = config.step2;
+step2Params.inputVolume = step1Params.outputVolume;
+step2Params.outputVolume = sprintf('%s_T1w_crop.nii.gz', subjectName);
+deps2 = { step2Params.inputVolume };
+outputs2 = { step2Params.outputVolume };
+step2 = Step(@Crop, ...
+             step2Params, ...
+             deps2, ...
+             step2Config, ...
+             outputs2);
 
 %% step 3
+% denoise
+step3Params = struct();
+step3Config = config.step3;
+step3Params.inputFile = step2Params.outputVolume;
+step3Params.outputFile = sprintf('%s_T1w_denoised.nii', subjectName);
+deps3 = { step3Params.inputFile };
+outputs3 = { step3Params.outputFile };
+step3 = Step(@DenoiseImage, ...
+             step3Params, ...
+             deps3, ...
+             step3Config, ...
+             outputs3);
+
+%% step 4
+% process anatomical image
+step4Params = struct();
+step4Config = config.step4;
+step4Params.inputFile = step3Params.outputFile;
+step4Params.outputFolder = sprintf('%s', subjectName);
+deps4 = { step4Params.inputFile };
+outputs4 = { ...
+  sprintf('%s.anat/T1_biascorr.nii.gz', subjectName), ...
+  sprintf('%s.anat/T1_subcort_seg.nii.gz', subjectName), ...
+};
+step4 = Step(@ProcessAnatomicalImage, ...
+             step4Params, ...
+             deps4, ...
+             step4Config, ...
+             outputs4);
+
+%% step 5
+% extract brain
+step5Params = struct();
+% you can also assign a dedicated step configuration object
+step5Config = config.step5;
+step5Params.inputVolume = sprintf('%s.anat/T1_biascorr.nii.gz', subjectName);
+step5Params.outputVolume = sprintf('%s_T1w_brain.nii.gz', subjectName);
+deps5 = { step5Params.inputVolume };
+outputs5 = { step5Params.outputVolume };
+step5 = Step(@ExtractBrain, ...
+             step5Params, ...
+             deps5, ...
+             step5Config, ...
+             outputs5);
+
+%% step 6
+% fill holes
+step6Params = struct();
+step6Config = config.step6;
+step6Params.inputVolume = sprintf('%s_T1w_brain_mask.nii.gz', subjectName);
+step6Params.outputVolume = sprintf('%s_T1w_brain_mask_filled.nii.gz', subjectName);
+deps6 = { step6Params.inputVolume };
+outputs6 = { step6Params.outputVolume };
+step6 = Step(@FillHoles, ...
+             step6Params, ...
+             deps6, ...
+             step6Config, ...
+             outputs6);
+
+%% step 7
 % multiply brain by mask
 % extra step to be very precise on the extraction
-params = {};
-config = {};
-params.inputVolume1 = sprintf('%s_T1w.nii.gz', subjectName);
-params.inputVolume2 = sprintf('%s_T1w_brain_mask_filled.nii.gz', subjectName);
-params.outputVolume = sprintf('%s_T1w_brain_mul.nii.gz', subjectName);
-config.verbose = true;
-deps = { params.inputVolume1, params.inputVolume2 };
-step3 = Step(@MultiplyVolumes, params, deps, config);
+step7Params = struct();
+step7Config = config.step7;
+step7Params.inputVolume1 = sprintf('%s.anat/T1_biascorr.nii.gz', subjectName);
+step7Params.inputVolume2 = sprintf('%s_T1w_brain_mask_filled.nii.gz', subjectName);
+step7Params.outputVolume = sprintf('%s_T1w_brain_trim.nii.gz', subjectName);
+deps7 = { step7Params.inputVolume1, step7Params.inputVolume2 };
+outputs7 = { step7Params.outputVolume };
+step7 = Step(@MultiplyVolumes, ...
+             step7Params, ...
+             deps7, ...
+             step7Config, ...
+             outputs7);
 
 % set up steps in order
-steps = { step1, step2, step3 };
+steps = { step1, ...
+          step2, ...
+          step3, ...
+          step4, ...
+          step5, ...
+          step6, ...
+          step7 };
 
 % these files will be copied from the workspace to the output path
-outputs = { sprintf('%s_T1w_brain.nii.gz', subjectName), ...
+outputs = { sprintf('%s_T1w.nii.gz', subjectName)  ...
+            sprintf('%s_T1w_brain.nii.gz', subjectName), ...
             sprintf('%s_T1w_brain_mask_filled.nii.gz', subjectName), ...
-            sprintf('%s_T1w_brain_mul.nii.gz', subjectName) };
+            sprintf('%s.anat/T1_subcort_seg.nii.gz', subjectName), ...
+            sprintf('%s.anat/T1_biascorr.nii.gz', subjectName), ...
+            sprintf('%s_T1w_brain_trim.nii.gz', subjectName) };
 
 sequence = Sequence(steps, ...
                     inputs, ...
                     outputs, ...
                     pathToWorkspace, ...
                     pathToOutput, ...
-                    true);
+                    config.sequence);
 
 end

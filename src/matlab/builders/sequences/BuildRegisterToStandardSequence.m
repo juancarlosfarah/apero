@@ -20,7 +20,7 @@ function [sequence] = BuildRegisterToStandardSequence(inputs, ...
 % pipeline
 step1Params = struct();
 step1Config = config.step1;
-step1Params.inputVolume = sprintf('%s_T1w_brain_mul.nii.gz', subjectName);
+step1Params.inputVolume = sprintf('%s_T1w_brain_trim.nii.gz', subjectName);
 step1Params.referenceVolume = 'ch2bet.nii.gz';
 step1Params.outputVolume = sprintf('%s_T1w_brain_dof6.nii.gz', subjectName);
 step1Params.outputMatrix = sprintf('%s_T1w2MNI_dof6.mat', subjectName);
@@ -34,10 +34,10 @@ step1 = Step(@PerformLinearImageRegistration, ...
 
 
 %% step 2
-% apply the result of step 1 dof 6 to original t1 input file
+% apply the result of step 1 dof 6 to the bias-corrected t1 input file
 step2Params = struct();
 step2Config = config.step2;
-step2Params.inputVolume = sprintf('%s_T1w.nii.gz', subjectName);
+step2Params.inputVolume = sprintf('T1_biascorr.nii.gz', subjectName);
 step2Params.referenceVolume = 'ch2bet.nii.gz';
 step2Params.outputVolume = sprintf('%s_T1w_dof6.nii.gz', subjectName);
 step2Params.initMatrix = sprintf('%s_T1w2MNI_dof6.mat', subjectName);
@@ -177,6 +177,6 @@ sequence = Sequence(steps, ...
                     outputs, ...
                     pathToWorkspace, ...
                     pathToOutput, ...
-                    true);
+                    config.sequence);
 
 end

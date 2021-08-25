@@ -30,7 +30,8 @@ end
 % names of inputs needed to start the sequence
 inputs = { ...
   fullfile(pathToDataset, '%s/anat/%s_T1w.nii.gz'), ...
-  fullfile(pathToIntermediaryOutputs, '%s/%s_T1w_brain_mul.nii.gz'), ...
+  fullfile(pathToIntermediaryOutputs, '%s/%s_T1w_brain_trim.nii.gz'), ...
+  fullfile(pathToIntermediaryOutputs, '%s/T1_biascorr.nii.gz'), ...
   fullfile(pathToParcellations, 'ch2bet.nii.gz'), ...
   fullfile(pathToParcellations, 'ch2.nii.gz') ...
 };
@@ -67,6 +68,7 @@ for i = 1 : numSubjects
   for j = 1 : numInputs
     input = inputs{j};
     % get number of times subject name is needed
+    subjectNameArray = {};
     subjectNameOccurences = count(input, '%s');
     [subjectNameArray{1:subjectNameOccurences}] = deal(subjectName);
     subjectInputs{j} = sprintf(input, subjectNameArray{:});
@@ -82,8 +84,7 @@ for i = 1 : numSubjects
 end
 
 % create a pipeline with the sequences
-parallel = false;
-pipeline = Pipeline(sequences, parallel);
+pipeline = Pipeline(sequences, config.parallel);
 
 end
 

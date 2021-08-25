@@ -29,7 +29,11 @@ config.pathToParcellations = pathToParcellations;
 config.pathToOutput = pathToOutput;
 % helps debug by not running all subjects
 config.numSubjects = 1;
+config.parallel = false;
 
+% sequence level configurations
+config.sequence.startStep = 1;
+config.sequence.noCleanUp = true;
 
 %% step 1
 % flirt

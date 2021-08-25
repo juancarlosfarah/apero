@@ -31,9 +31,16 @@ config.pathToOutput = pathToOutput;
 config.numSubjects = 1;
 % select the parcellation to transform
 % (must be present in `pathToParcellations`)
-% usually you use first a parcellation and then a ventricle atlas
+% usually you use first a parcellation
+% e.g. 'schaefer_2018_400_subc.nii'
+% and then a ventricle atlas
 % e.g. 'mask_ventricles_MNIch2.nii.gz'
 config.parcellation = 'schaefer_2018_400_subc.nii';
+config.parallel = false;
+
+% sequence level configurations
+config.sequence.startStep = 1;
+config.sequence.noCleanUp = true;
 
 % step 1: dilate parcellaton
 config.step1.numDilations = 1;

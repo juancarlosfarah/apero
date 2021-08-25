@@ -33,7 +33,7 @@ config.parcellation = 'schaefer_2018_400_subc';
 config.parallel = false;
 
 % sequence level configurations
-config.sequence.startStep = 6;
+config.sequence.startStep = 1;
 config.sequence.noCleanUp = true;
 
 
