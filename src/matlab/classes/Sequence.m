@@ -45,6 +45,9 @@ classdef Sequence
       if ~isfield(obj.Configuration, 'startStep')
          obj.Configuration.startStep = 1;
       end
+      if ~isfield(obj.Configuration, 'runOnly')
+         obj.Configuration.runOnly = [];
+      end
 
 
       obj.Steps = steps;
@@ -197,6 +200,16 @@ classdef Sequence
       % execute all steps sequentially
       for i = 1 : length(obj.Steps)
         step = obj.Steps{i};
+
+        % check if we are only running certain steps
+        runOnly = obj.Configuration.runOnly;
+        if ~isempty(runOnly) && ~any(runOnly(:) == i)
+          % create string warning, removing extra space
+          stepsString = sprintf('%i, ', runOnly);
+          stepsString = stepsString(1 : end - 1);
+          warning('only running step(s) %s skipping step %d', stepsString, i);
+          continue;
+        end
 
         % check if we are skipping this step using start step
         startStep = obj.Configuration.startStep;
