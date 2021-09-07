@@ -304,4 +304,40 @@ config.step32.skip = false;
 config.step32.clobber = config.clobber;
 config.step32.verbose = config.verbose;
 
+%% step 33
+% perform regression
+config.step33.threshold = 0.5;
+config.step33.optional = false;
+config.step33.skip = false;
+config.step33.clobber = config.clobber;
+config.step33.verbose = config.verbose;
+
+%% step 34
+% global signal time series
+config.step34.optional = false;
+config.step34.skip = false;
+config.step34.clobber = config.clobber;
+config.step34.verbose = config.verbose;
+
+%% step 35
+% gray matter time series
+config.step35.optional = false;
+config.step35.skip = false;
+config.step35.clobber = config.clobber;
+config.step35.verbose = config.verbose;
+
+%% step 36
+% white matter time series
+config.step36.optional = false;
+config.step36.skip = false;
+config.step36.clobber = config.clobber;
+config.step36.verbose = config.verbose;
+
+%% step 37
+% csfvent time series
+config.step37.optional = false;
+config.step37.skip = false;
+config.step37.clobber = config.clobber;
+config.step37.verbose = config.verbose;
+
 end

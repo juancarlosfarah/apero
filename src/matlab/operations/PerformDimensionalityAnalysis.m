@@ -1,4 +1,3 @@
-% function [mask, ts, var, pca, avg, deriv, numVoxels] = 
 function [status, result] = PerformDimensionalityAnalysis(pathToWorkspace, ...
                                                           params, ...
                                                           config)
@@ -22,23 +21,25 @@ arguments
   params.maskVolume char
   % path for output
   params.outputFile char
+  config.regressorsOutputFile char
   config.numPcaComponents int8 = 5
   config.verbose logical = false
 end
 
 status = 0;
 
-mask = MRIread(fullfile(pathToWorkspace, params.maskVolume));
 brain = MRIread(fullfile(pathToWorkspace, params.brainVolume));
-
 [~, ~, ~, numTimePoints] = size(brain.vol);
+
+[mask, numVoxels] = GetMask(fullfile(pathToWorkspace, params.maskVolume), ...
+                            numTimePoints);
+
 numPcaComponents = config.numPcaComponents;
 
 outputFile = fullfile(pathToWorkspace, params.outputFile);
+regressorsOutputFile = fullfile(pathToWorkspace, ...
+                                config.regressorsOutputFile);
 
-
-numVoxels = nnz(mask.vol);
-mask = logical(repmat(mask.vol, [1, 1, 1, numTimePoints]));
 % time series of voxels
 ts = reshape(brain.vol(mask), [numVoxels, numTimePoints]);
 [pca, var] = GetPca(ts', numPcaComponents);
@@ -52,6 +53,14 @@ save(outputFile, ...
      'avg', ...
      'deriv', ...
      'numVoxels');
+
+% regressors are transformed
+avgRegressor = avg';
+derivRegressors = deriv';
+% save in a format that can be used automatically by PerformRegression
+save(regressorsOutputFile, ...
+     'avgRegressor', ...
+     'derivRegressors');
    
 result = 'PerformDimensionalityAnalysis: saved result of analysis';
 if config.verbose
