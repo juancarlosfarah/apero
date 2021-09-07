@@ -756,7 +756,7 @@ step34 = Step(@SaveMaskedTimeSeries, ...
 %% step 35
 % gray matter time series
 step35Params = struct();
-step35Config = config.step34;
+step35Config = config.step35;
 % brain output from regression
 step35Params.brainVolume = step33Params.outputVolume;
 % gray matter mask
@@ -775,7 +775,7 @@ step35 = Step(@SaveMaskedTimeSeries, ...
 %% step 36
 % white matter time series
 step36Params = struct();
-step36Config = config.step34;
+step36Config = config.step36;
 % brain output from regression
 step36Params.brainVolume = step33Params.outputVolume;
 % white matter mask eroded
@@ -795,7 +795,7 @@ step36 = Step(@SaveMaskedTimeSeries, ...
 %% step 37
 % csfvent time series
 step37Params = struct();
-step37Config = config.step34;
+step37Config = config.step37;
 % brain output from regression
 step37Params.brainVolume = step33Params.outputVolume;
 % csf vent mask eroded
@@ -810,6 +810,25 @@ step37 = Step(@SaveMaskedTimeSeries, ...
               deps37, ...
               step37Config, ...
               outputs37);
+
+%% step 38
+% band pass filter
+step38Params = struct();
+step38Config = config.step38;
+% brain output from regression
+step38Params.inputVolume = step33Params.outputVolume;
+% gs time series
+step38Params.timeSeriesFile = step34Params.outputFile;
+step38Params.outputVolume = sprintf('%s_%s_bandpass.nii.gz', ...
+                                    subjectName, ...
+                                    run);
+deps38 = { step38Params.inputVolume, step38Params.timeSeriesFile };
+outputs38 = { step38Params.outputVolume };
+step38 = Step(@ApplyBandPassFilter, ...
+              step38Params, ...
+              deps38, ...
+              step38Config, ...
+              outputs38);
 
 %% prepare the sequence
 % set up steps in order
@@ -849,7 +868,8 @@ steps = { step1, ...
           step34, ...
           step35, ...
           step36, ...
-          step37 };
+          step37, ...
+          step38 };
 
 % these files will be copied from the workspace to the output path
 % todo: add final version

@@ -340,4 +340,16 @@ config.step37.skip = false;
 config.step37.clobber = config.clobber;
 config.step37.verbose = config.verbose;
 
+%% step 38
+% band pass filter
+config.step38.fMin = 0.01;
+% 0.25 is good, don't go over 0.3 (start getting breathing artifacts)
+config.step38.fMax = 0.25;
+config.step38.temporalResolution = 1.205;
+config.step38.order = 1;
+config.step38.optional = false;
+config.step38.skip = false;
+config.step38.clobber = config.clobber;
+config.step38.verbose = config.verbose;
+
 end
