@@ -352,4 +352,28 @@ config.step38.skip = false;
 config.step38.clobber = config.clobber;
 config.step38.verbose = config.verbose;
 
+%% step 39
+% perform pca1 regression
+config.step39.numComponents = 1;
+config.step39.optional = false;
+config.step39.skip = false;
+config.step39.clobber = config.clobber;
+config.step39.verbose = config.verbose;
+
+%% step 40
+% perform pca3 regression
+config.step40.numComponents = 3;
+config.step40.optional = false;
+config.step40.skip = false;
+config.step40.clobber = config.clobber;
+config.step40.verbose = config.verbose;
+
+%% step 41
+% perform pca5 regression
+config.step41.numComponents = 5;
+config.step41.optional = false;
+config.step41.skip = false;
+config.step41.clobber = config.clobber;
+config.step41.verbose = config.verbose;
+
 end

@@ -22,7 +22,7 @@ arguments
   % path for output
   params.outputFile char
   config.regressorsOutputFile char
-  config.numPcaComponents int8 = 5
+  config.numPcaComponents double {mustBeInteger} = 5
   config.verbose logical = false
 end
 
