@@ -376,4 +376,25 @@ config.step41.skip = false;
 config.step41.clobber = config.clobber;
 config.step41.verbose = config.verbose;
 
+%% step 42
+% extract rois
+config.step42.optional = false;
+config.step42.skip = false;
+config.step42.clobber = config.clobber;
+config.step42.verbose = config.verbose;
+
+%% step 43
+% extract rois
+config.step43.optional = false;
+config.step43.skip = false;
+config.step43.clobber = config.clobber;
+config.step43.verbose = config.verbose;
+
+%% step 44
+% extract rois
+config.step44.optional = false;
+config.step44.skip = false;
+config.step44.clobber = config.clobber;
+config.step44.verbose = config.verbose;
+
 end
