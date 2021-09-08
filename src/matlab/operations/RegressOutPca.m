@@ -34,8 +34,8 @@ maskVolume = MRIread(fullfile(pathToWorkspace, params.maskVolume));
 % count number of time points
 [~, ~, ~, numTimePoints] = size(brainVolume.vol);
 
-[mask, ~] = GetMask(fullfile(pathToWorkspace, params.maskVolume), ...
-                    numTimePoints);
+[mask, ~] = Generate4dMask(fullfile(pathToWorkspace, params.maskVolume), ...
+                           numTimePoints);
 
 % set voxels outside the brain to 0
 brainVolume.vol(~mask) = 0;

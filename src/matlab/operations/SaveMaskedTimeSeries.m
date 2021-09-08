@@ -29,8 +29,8 @@ status = 0;
 brain = MRIread(fullfile(pathToWorkspace, params.brainVolume));
 [~, ~, ~, numTimePoints] = size(brain.vol);
 
-[mask, numVoxels] = GetMask(fullfile(pathToWorkspace, params.maskVolume), ...
-                            numTimePoints);
+[mask, numVoxels] = Generate4dMask(fullfile(pathToWorkspace, params.maskVolume), ...
+                                   numTimePoints);
 
 ts = reshape(brain.vol(mask), [numVoxels, numTimePoints]);
 
