@@ -43,7 +43,7 @@ maskVolume = MRIread(fullfile(pathToWorkspace, params.maskVolume));
                     numTimePoints);
 
 % set voxels outside the brain to 0
-brainVolume.vol(mask) = 0;
+brainVolume.vol(~mask) = 0;
   
 %% outlier indexes
 % we can still have volumes that are affected by motion

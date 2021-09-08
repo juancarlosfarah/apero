@@ -14,7 +14,7 @@ resid = zeros(sizeX, sizeY, sizeZ, numTimePoints);
 
 for i = 1 : sizeX
   for j = 1 : sizeY
-    for k = 1 :  sizeZ
+    for k = 1 : sizeZ
       if mask(i, j, k)
         tsVoxel = reshape(data(i, j, k, :), [numTimePoints, 1]);
         % coeffs learned from good points only
@@ -29,4 +29,6 @@ for i = 1 : sizeX
   if (mod(i, 25) == 0)
     fprintf('%d%% done applying regressors...\n', round(i / sizeX * 100));
   end
+end
+
 end
