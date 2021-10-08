@@ -6,7 +6,8 @@ filePath = fileparts(which(mfilename));
 addpath(genpath(fullfile(filePath, '../../matlab')));
 
 % build configuration
-config = BuildSegmentationConfiguration();
+parcellation = 'shen_MNI152';
+config = BuildSegmentationConfiguration(parcellation);
 
 pipeline = BuildSegmentationPipeline(config.parcellation, ...
                                      config.pathToWorkspace, ...

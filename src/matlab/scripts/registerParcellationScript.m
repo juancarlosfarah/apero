@@ -2,7 +2,8 @@
 clearvars;
 
 % build configuration
-config = BuildSampleConfiguration();
+parcellation = 'shen_MNI152';
+config = BuildSampleConfiguration(parcellation);
 
 pipeline = BuildRegisterParcellationPipeline(config.common.pathToWorkspace, ...
                                              config.common.pathToDataset, ...

@@ -13,7 +13,7 @@ config = struct();
 % get data folder relative to this file
 filePath = fileparts(which(mfilename));
 pathToDataFolder = fullfile(filePath, '../../../../../neurochi/data/');
-pathToWorkspace = fullfile(pathToDataFolder, 'w1');
+pathToWorkspace = fullfile(pathToDataFolder, 'workspace');
 pathToDataset = fullfile(pathToDataFolder, 'input');
 pathToParcellations = fullfile(pathToDataFolder, 'parcs');
 % for intermediary pipelines, send output to the transfer folder
@@ -28,8 +28,8 @@ config.pathToDataset = pathToDataset;
 config.pathToParcellations = pathToParcellations;
 config.pathToOutput = pathToOutput;
 % helps debug by not running all subjects
-config.numSubjects = 1;
-config.parallel = false;
+config.numSubjects = 2;
+config.parallel = true;
 
 % sequence level configurations
 config.sequence.startStep = 1;
