@@ -1,12 +1,9 @@
-function [status, result] = InvertBinaryMask(pathToWorkspace, ...
-                                             params, ...
-                                             config)
+function [status, result] = InvertBinaryMask(pathToWorkspace, config)
 %INVERTBINARYMASK Invert a binary mask.
 %   Uses `fslmaths` to invert a binary mask.
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -16,9 +13,9 @@ function [status, result] = InvertBinaryMask(pathToWorkspace, ...
 arguments
   pathToWorkspace char = '.'
   % filename of input image
-  params.inputVolume char
+  config.inputVolume char
   % filename of output image
-  params.outputVolume char
+  config.outputVolume char
   % optional step
   config.optional logical = false
   % clobber previous output
@@ -32,8 +29,8 @@ end
 verbose = config.verbose || config.v;
 
 %% main command
-fullInputVolume = fullfile(pathToWorkspace, params.inputVolume);
-fullOutputVolume = fullfile(pathToWorkspace, params.outputVolume);
+fullInputVolume = fullfile(pathToWorkspace, config.inputVolume);
+fullOutputVolume = fullfile(pathToWorkspace, config.outputVolume);
 command = 'fslmaths %s -mul -1 -add 1 %s';
 command = sprintf(command, fullInputVolume, fullOutputVolume);
 

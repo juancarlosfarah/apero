@@ -1,5 +1,4 @@
 function [status, result] = PerformNonLinearImageRegistration(pathToWorkspace, ...
-                                                              params, ...
                                                               config)
 %PERFORMNONLINEARIMAGEREGISTRATION Perform nonlinear image registration using `fnirt`.
 %   Uses `fnirt` to perform nonlinear image registration.
@@ -8,13 +7,12 @@ function [status, result] = PerformNonLinearImageRegistration(pathToWorkspace, .
 %   explanatory message in result.
 %
 %   Input:
-%   - pathToWorkspace:  ...
-%   - params:           ...
-%   - config:           ...
+%   - pathToWorkspace:  Path to the workspace.
+%   - config:           Configuration to be used in the operation.
 %
 %   Output:
-%   - status:  ...
-%   - result:  ...  
+%   - status:  Status returned by system call.
+%   - result:  Result returned by system call.
 %
 % Optional arguments (You may optionally specify one or more of):
 % 	--aff		name of file containing affine transform
@@ -56,13 +54,13 @@ function [status, result] = PerformNonLinearImageRegistration(pathToWorkspace, .
 arguments
   pathToWorkspace char = '.'
   % name of input image
-  params.inputImage char
+  config.inputImage char
   % name of reference image
-  params.referenceImage char
+  config.referenceImage char
   % name of output image
-  params.outputImage char = ''
+  config.outputImage char = ''
   % name of output file with field coefficients
-  params.outputFieldCoefficients char = ''
+  config.outputFieldCoefficients char = ''
   % image interpolation model
   config.interp char {mustBeMember(config.interp, { ...
     'linear', ...
@@ -73,26 +71,25 @@ arguments
 end
 
 %% main command
-fullInputImage = fullfile(pathToWorkspace, params.inputImage);
-fullReferenceImage = fullfile(pathToWorkspace, params.referenceImage);
+fullInputImage = fullfile(pathToWorkspace, config.inputImage);
+fullReferenceImage = fullfile(pathToWorkspace, config.referenceImage);
 command = 'fnirt --in=%s --ref=%s';
 command = sprintf(command, fullInputImage, fullReferenceImage);
 
-%% secondary params
+%% options
 % name of output image
-if ~isempty(params.outputImage)
-  fullOutputImage = fullfile(pathToWorkspace, params.outputImage);
+if ~isempty(config.outputImage)
+  fullOutputImage = fullfile(pathToWorkspace, config.outputImage);
   command = sprintf('%s --iout=%s', command, fullOutputImage);
 end
 
 % name of output file for field coefficients
-if ~isempty(params.outputFieldCoefficients)
+if ~isempty(config.outputFieldCoefficients)
   fullOutputFieldCoefficients = fullfile(pathToWorkspace, ...
-                                         params.outputFieldCoefficients);
+                                         config.outputFieldCoefficients);
   command = sprintf('%s --cout=%s', command, fullOutputFieldCoefficients);
 end
 
-%% options
 % image interpolation model
 if config.interp
   command = sprintf('%s --interp=%s', command, config.interp);

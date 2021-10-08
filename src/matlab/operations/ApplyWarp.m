@@ -1,12 +1,9 @@
-function [status, result] = ApplyWarp(pathToWorkspace, ...
-                                       params, ...
-                                       config)
+function [status, result] = ApplyWarp(pathToWorkspace, config)
 %APPLYWARP Apply a non-linear mapping.
 %   Uses `applywarp` to apply a non-linear mapping.
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -33,13 +30,13 @@ function [status, result] = ApplyWarp(pathToWorkspace, ...
 arguments
   pathToWorkspace char = '.'
   % filename of input image (to be warped)
-  params.inputVolume char
+  config.inputVolume char
   % filename for output (warped) image
-  params.outputVolume char
+  config.outputVolume char
   % filename for reference image
-  params.referenceVolume char
+  config.referenceVolume char
   % filename for warp/coefficient (volume)
-  params.warpVolume char = ''
+  config.warpVolume char = ''
   % interpolation method
   config.interp char {mustBeMember(config.interp, { ...
     'nn', ...
@@ -53,19 +50,19 @@ arguments
 end
 
 %% main command
-fullInputVolume = fullfile(pathToWorkspace, params.inputVolume);
-fullReferenceVolume = fullfile(pathToWorkspace, params.referenceVolume);
-fullOutputVolume = fullfile(pathToWorkspace, params.outputVolume);
+fullInputVolume = fullfile(pathToWorkspace, config.inputVolume);
+fullReferenceVolume = fullfile(pathToWorkspace, config.referenceVolume);
+fullOutputVolume = fullfile(pathToWorkspace, config.outputVolume);
 command = 'applywarp --in=%s --ref=%s --out=%s';
 command = sprintf(command, ...
                   fullInputVolume, ...
                   fullReferenceVolume, ...
                   fullOutputVolume);
 
-%% secondary params
+%% secondary input
 % filename for warp/coefficient (volume)
-if params.warpVolume
-  fullWarpVolume = fullfile(pathToWorkspace, params.warpVolume);
+if config.warpVolume
+  fullWarpVolume = fullfile(pathToWorkspace, config.warpVolume);
   command = sprintf('%s --warp=%s', command, fullWarpVolume);
 end
 

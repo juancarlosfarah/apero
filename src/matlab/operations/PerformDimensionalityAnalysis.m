@@ -1,12 +1,10 @@
 function [status, result] = PerformDimensionalityAnalysis(pathToWorkspace, ...
-                                                          params, ...
                                                           config)
 %PERFORMDIMENSIONALITYANALYSIS Summary of this function goes here
 %   Detailed explanation goes here
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -16,11 +14,11 @@ function [status, result] = PerformDimensionalityAnalysis(pathToWorkspace, ...
 arguments
   pathToWorkspace char = '.'
   % filename for input
-  params.brainVolume char
+  config.brainVolume char
   % use supplied mask image for calculating metric
-  params.maskVolume char
+  config.maskVolume char
   % path for output
-  params.outputFile char
+  config.outputFile char
   config.regressorsOutputFile char
   config.numPcaComponents double {mustBeInteger} = 5
   config.verbose logical = false
@@ -28,15 +26,15 @@ end
 
 status = 0;
 
-brain = MRIread(fullfile(pathToWorkspace, params.brainVolume));
+brain = MRIread(fullfile(pathToWorkspace, config.brainVolume));
 [~, ~, ~, numTimePoints] = size(brain.vol);
 
-[mask, numVoxels] = Generate4dMask(fullfile(pathToWorkspace, params.maskVolume), ...
+[mask, numVoxels] = Generate4dMask(fullfile(pathToWorkspace, config.maskVolume), ...
                                    numTimePoints);
 
 numPcaComponents = config.numPcaComponents;
 
-outputFile = fullfile(pathToWorkspace, params.outputFile);
+outputFile = fullfile(pathToWorkspace, config.outputFile);
 regressorsOutputFile = fullfile(pathToWorkspace, ...
                                 config.regressorsOutputFile);
 

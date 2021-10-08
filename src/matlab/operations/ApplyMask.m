@@ -1,12 +1,9 @@
-function [status, result] = ApplyMask(pathToWorkspace, ...
-                                      params, ...
-                                      config)
+function [status, result] = ApplyMask(pathToWorkspace, config)
 %APPLYMASK Apply a mask to an image.
 %   Uses `fslmaths` to apply a mask to an image.
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -16,11 +13,11 @@ function [status, result] = ApplyMask(pathToWorkspace, ...
 arguments
   pathToWorkspace char = '.'
   % filename of input image (to be masked)
-  params.inputVolume char
+  config.inputVolume char
   % filename for output (masked) image
-  params.outputVolume char
+  config.outputVolume char
   % filename for mask
-  params.maskVolume char
+  config.maskVolume char
   % optional
   config.optional logical = false
   % clobber previous output
@@ -34,9 +31,9 @@ end
 verbose = config.verbose || config.v;
 
 %% main command
-fullInputVolume = fullfile(pathToWorkspace, params.inputVolume);
-fullMaskVolume = fullfile(pathToWorkspace, params.maskVolume);
-fullOutputVolume = fullfile(pathToWorkspace, params.outputVolume);
+fullInputVolume = fullfile(pathToWorkspace, config.inputVolume);
+fullMaskVolume = fullfile(pathToWorkspace, config.maskVolume);
+fullOutputVolume = fullfile(pathToWorkspace, config.outputVolume);
 
 
 command = 'fslmaths %s -mas %s %s';

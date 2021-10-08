@@ -1,12 +1,9 @@
-function [status, result] = FillHoles(pathToWorkspace, ...
-                                      params, ...
-                                      config)
+function [status, result] = FillHoles(pathToWorkspace, config)
 %FILLHOLES Fill holes in the volume, without changing fov.
 %   Uses `fslmaths` with `fillh` to fill holes in a volume.
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -15,13 +12,13 @@ function [status, result] = FillHoles(pathToWorkspace, ...
 
 arguments
   pathToWorkspace char = '.'
-  params.inputVolume char
-  params.outputVolume char
+  config.inputVolume char
+  config.outputVolume char
   config.verbose logical = false
 end
 
-fullInputVolume = fullfile(pathToWorkspace, params.inputVolume);
-fullOutputVolume = fullfile(pathToWorkspace, params.outputVolume);
+fullInputVolume = fullfile(pathToWorkspace, config.inputVolume);
+fullOutputVolume = fullfile(pathToWorkspace, config.outputVolume);
 command = 'fslmaths %s -fillh %s';
 sentence = sprintf(command, fullInputVolume, fullOutputVolume);
 

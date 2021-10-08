@@ -14,25 +14,17 @@ classdef Step
   end
 
   methods
-    function obj = Step(op, params, deps, config, outputs)
+    function obj = Step(op, config, deps, outputs)
       %STEP Construct an instance of this class
       %   Detailed explanation goes here
       arguments
         op
-        params = struct()
-        deps = {}
         config = struct()
+        deps = {}
         outputs = {}
       end
 
       obj.Operation = op;
-
-      % default to empty struct if empty cell array is passed
-      if isempty(params)
-        obj.Parameters = struct();
-      else
-        obj.Parameters = params;
-      end
 
       % default to empty struct if empty cell array is passed
       if isempty(config)
@@ -134,13 +126,11 @@ classdef Step
 
       % check if we are clobbering outputs
       % need to convert struct to name-value paired arguments
-      params = namedargs2cell(obj.Parameters);
       config = namedargs2cell(obj.getOperationConfiguration());
       % status = 0 signals everything went fine
       % if operation fails, returns a nonzero value in
       % status and an explanatory message in result
       [status, output] = obj.Operation(pathToWorkspace, ...
-                                       params{:}, ...
                                        config{:});
     end
   end

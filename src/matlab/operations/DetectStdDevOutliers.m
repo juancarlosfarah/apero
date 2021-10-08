@@ -1,12 +1,10 @@
 function [status, result] = DetectStdDevOutliers(pathToWorkspace, ...
-                                                 params, ...
                                                  config)
 %DETECTSTDDEVOUTLIERS Detect standard deviation outliers.
 %   Uses `fslstats` to detect standard deviation outliers.
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -17,19 +15,19 @@ function [status, result] = DetectStdDevOutliers(pathToWorkspace, ...
 arguments
   pathToWorkspace char = '.'
   % filename for input
-  params.inputVolume char
+  config.inputVolume char
   % path for output
-  params.outputFile char
+  config.outputFile char
   % path for outliers
-  params.outputOutliers char = 'stdDevOutliers.mat'
+  config.outputOutliers char = 'stdDevOutliers.mat'
   % specify absolute threshold value 
   config.thresh double {mustBeInRange(config.thresh, 0, 1)}
   config.verbose logical = false
 end
 
-inputVolume = fullfile(pathToWorkspace, params.inputVolume);
-outputFile = fullfile(pathToWorkspace, params.outputFile);
-outliersFile = fullfile(pathToWorkspace, params.outputOutliers);
+inputVolume = fullfile(pathToWorkspace, config.inputVolume);
+outputFile = fullfile(pathToWorkspace, config.outputFile);
+outliersFile = fullfile(pathToWorkspace, config.outputOutliers);
 verbose = config.verbose;
 
 %% get standard deviations

@@ -1,12 +1,9 @@
-function [status, result] = FillBrainMask(pathToWorkspace, ...
-                                          params, ...
-                                          config)
+function [status, result] = FillBrainMask(pathToWorkspace, config)
 %FILLBRAINMASK Fill holes in a brain volume based on a reference volume.
 %   Uses `fslmaths` with `fillh` to fill holes in a volume.
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -15,17 +12,17 @@ function [status, result] = FillBrainMask(pathToWorkspace, ...
 
 arguments
   pathToWorkspace char = '.'
-  params.inputVolume char
-  params.referenceVolume char
-  params.outputVolume char
+  config.inputVolume char
+  config.referenceVolume char
+  config.outputVolume char
   config.verbose logical = false
 end
 
 verbose = config.verbose;
 
-fullInputVolume = fullfile(pathToWorkspace, params.inputVolume);
-fullReferenceVolume = fullfile(pathToWorkspace, params.referenceVolume);
-fullOutputVolume = fullfile(pathToWorkspace, params.outputVolume);
+fullInputVolume = fullfile(pathToWorkspace, config.inputVolume);
+fullReferenceVolume = fullfile(pathToWorkspace, config.referenceVolume);
+fullOutputVolume = fullfile(pathToWorkspace, config.outputVolume);
 
 % read brain mask
 volBrain = MRIread(fullInputVolume);

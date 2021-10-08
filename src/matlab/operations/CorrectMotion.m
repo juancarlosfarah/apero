@@ -1,12 +1,9 @@
-function [status, result] = CorrectMotion(pathToWorkspace, ...
-                                          params, ...
-                                          config)
+function [status, result] = CorrectMotion(pathToWorkspace, config)
 %CORRECTMOTION Motion correct a timeseries.
 %   Uses `mcflirt` to motion correct a timeseries.
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -37,9 +34,9 @@ function [status, result] = CorrectMotion(pathToWorkspace, ...
 
 arguments
   pathToWorkspace char = '.'
-  params.inputVolume char
+  config.inputVolume char
   % default is infile_mcf
-  params.outputVolume char
+  config.outputVolume char
   % save transformation parameters in file outputfilename.par
   config.plots logical = false
   % register timeseries to mean volume (overrides refvol and reffile options)
@@ -54,13 +51,13 @@ end
 % normalize if multiple options mean the same thing
 verbose = config.verbose || config.v;
 
-fullInputVolume = fullfile(pathToWorkspace, params.inputVolume);
+fullInputVolume = fullfile(pathToWorkspace, config.inputVolume);
 
 command = 'mcflirt -in %s';
 command = sprintf(command, fullInputVolume);
 
-if isfield(params, 'outputVolume')
-  fullOutputVolume = fullfile(pathToWorkspace, params.outputVolume);
+if isfield(config, 'outputVolume')
+  fullOutputVolume = fullfile(pathToWorkspace, config.outputVolume);
   command = sprintf('%s -o %s', command, fullOutputVolume);
 end
 
@@ -82,7 +79,7 @@ end
 
 %% values and derivatives of 6 motion regressors
 if config.plots && isfield(config, 'regressorsFile')
-  plotsFile = sprintf('%s.par', params.outputVolume);
+  plotsFile = sprintf('%s.par', config.outputVolume);
   
   % the par file contains the six nuisance regressors corresponding to
   % three directions of translation and three axes of rotation

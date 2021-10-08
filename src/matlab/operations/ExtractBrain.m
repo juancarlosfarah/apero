@@ -1,22 +1,19 @@
-function [status, result] = ExtractBrain(pathToWorkspace, ...
-                                         params, ...
-                                         config)
+function [status, result] = ExtractBrain(pathToWorkspace, config)
 %EXTRACTBRAIN Summary of this function goes here
 %   Extracts brain from fMRI data using FSL's `bet`.
 %
 %   Input:
-%   - pathToWorkspace:  ...
-%   - params:           ...
-%   - config:           ...
+%   - pathToWorkspace:  Path to the workspace.
+%   - config:           Configuration to be used in the operation.
 %
 %   Output:
-%   - status:  ...
-%   - result:   ...  
+%   - status:  Status returned by system call.
+%   - result:  Result returned by system call.
 
 arguments
   pathToWorkspace char = '.'
-  params.inputVolume char
-  params.outputVolume char
+  config.inputVolume char
+  config.outputVolume char
   % variations on default bet2 functionality (mutually exclusive options):
   config.type char {mustBeMember(config.type, { ...
     '', ...  % just run bet2
@@ -58,8 +55,8 @@ verbose = config.verbose || config.v;
 dbg = config.debug || config.d;
 
 %% main command
-fullInputVolume = fullfile(pathToWorkspace, params.inputVolume);
-fullOutputVolume = fullfile(pathToWorkspace, params.outputVolume);
+fullInputVolume = fullfile(pathToWorkspace, config.inputVolume);
+fullOutputVolume = fullfile(pathToWorkspace, config.outputVolume);
 command = 'bet %s %s';
 command = sprintf(command, fullInputVolume, fullOutputVolume);
 

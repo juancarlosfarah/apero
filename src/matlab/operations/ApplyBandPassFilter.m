@@ -1,12 +1,9 @@
-function [status, result] = ApplyBandPassFilter(pathToWorkspace, ...
-                                                params, ...
-                                                config)
+function [status, result] = ApplyBandPassFilter(pathToWorkspace, config)
 %APPLYBANDPASSFILTER Summary of this function goes here
 %   Detailed explanation goes here
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -15,9 +12,9 @@ function [status, result] = ApplyBandPassFilter(pathToWorkspace, ...
 
 arguments
   pathToWorkspace char = '.'
-  params.inputVolume char
-  params.outputVolume char
-  params.timeSeriesFile char
+  config.inputVolume char
+  config.outputVolume char
+  config.timeSeriesFile char
   config.fMin double {mustBeInRange(config.fMin, 0, 1)}
   config.fMax double {mustBeInRange(config.fMax, 0, 1)}
   config.temporalResolution double
@@ -26,10 +23,10 @@ arguments
   config.verbose logical = false
 end
 
-inputVolume = MRIread(fullfile(pathToWorkspace, params.inputVolume));
-outputVolume = fullfile(pathToWorkspace, params.outputVolume);
+inputVolume = MRIread(fullfile(pathToWorkspace, config.inputVolume));
+outputVolume = fullfile(pathToWorkspace, config.outputVolume);
 
-load(fullfile(pathToWorkspace, params.timeSeriesFile), 'ts', 'mask');
+load(fullfile(pathToWorkspace, config.timeSeriesFile), 'ts', 'mask');
 
 % applies band pass filter to the given timeseries and mask
 fMin = config.fMin;

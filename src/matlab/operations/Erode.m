@@ -1,12 +1,9 @@
-function [status, result] = Erode(pathToWorkspace, ...
-                                  params, ...
-                                  config)
+function [status, result] = Erode(pathToWorkspace, config)
 %ERODE Erode a volume one or more times.
 %   Uses `fslmaths` to erode a volume.
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -16,9 +13,9 @@ function [status, result] = Erode(pathToWorkspace, ...
 arguments
   pathToWorkspace char = '.'
   % filename for input
-  params.inputVolume char
+  config.inputVolume char
   % filename for output
-  params.outputVolume char
+  config.outputVolume char
   % type of erosion
   config.type char {mustBeMember(config.type, { ...
     'ero', ...  % zero non-zero voxels when zero voxels found in kernel
@@ -32,8 +29,8 @@ end
 % assume all went well
 success = true;
 
-fullInputVolume = fullfile(pathToWorkspace, params.inputVolume);
-fullOutputVolume = fullfile(pathToWorkspace, params.outputVolume);
+fullInputVolume = fullfile(pathToWorkspace, config.inputVolume);
+fullOutputVolume = fullfile(pathToWorkspace, config.outputVolume);
 results = cell(1, config.numErosions);
 verbose = config.verbose || config.v;
 

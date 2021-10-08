@@ -1,12 +1,9 @@
-function [status, result] = Detrend(pathToWorkspace, ...
-                                    params, ...
-                                    config)
+function [status, result] = Detrend(pathToWorkspace, config)
 %DETREND Summary of this function goes here
 %   Detailed explanation goes here
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -15,9 +12,9 @@ function [status, result] = Detrend(pathToWorkspace, ...
 
 arguments
   pathToWorkspace char = '.'
-  params.inputVolume char
-  params.maskVolume char
-  params.outputVolume char
+  config.inputVolume char
+  config.maskVolume char
+  config.outputVolume char
   % switch on diagnostic messages
   config.verbose logical = false
 end
@@ -25,9 +22,9 @@ end
 % success by default
 status = 0;
 
-inputVolume = fullfile(pathToWorkspace, params.inputVolume);
-maskVolume = fullfile(pathToWorkspace, params.maskVolume);
-outputVolume = fullfile(pathToWorkspace, params.outputVolume);
+inputVolume = fullfile(pathToWorkspace, config.inputVolume);
+maskVolume = fullfile(pathToWorkspace, config.maskVolume);
+outputVolume = fullfile(pathToWorkspace, config.outputVolume);
 verbose = config.verbose;
 
 %% read data

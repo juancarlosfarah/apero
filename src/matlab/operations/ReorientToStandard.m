@@ -1,6 +1,4 @@
-function [status, result] = ReorientToStandard(pathToWorkspace, ...
-                                               params, ...
-                                               config)
+function [status, result] = ReorientToStandard(pathToWorkspace, config)
 %REORIENTTOSTANDARD Reorient a volume to match MNI152.
 %   Uses `fslreorient2std` to reorient a volume.
 %
@@ -9,7 +7,6 @@ function [status, result] = ReorientToStandard(pathToWorkspace, ...
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -18,8 +15,8 @@ function [status, result] = ReorientToStandard(pathToWorkspace, ...
 
 arguments
   pathToWorkspace char = '.'
-  params.inputVolume char
-  params.outputVolume char
+  config.inputVolume char
+  config.outputVolume char
   % transformation matrix is written to this file
   config.m char
   % switch on diagnostic messages
@@ -30,7 +27,7 @@ end
 % normalize if multiple options mean the same thing
 verbose = config.verbose || config.v;
 
-fullInputVolume = fullfile(pathToWorkspace, params.inputVolume);
+fullInputVolume = fullfile(pathToWorkspace, config.inputVolume);
 
 command = 'fslreorient2std %s';
 command = sprintf(command, fullInputVolume);
@@ -40,8 +37,8 @@ if isfield(config, 'm')
   command = sprintf('%s -m %s', command, config.m);
 end
 
-if isfield(params, 'outputVolume')
-  fullOutputVolume = fullfile(pathToWorkspace, params.outputVolume);
+if isfield(config, 'outputVolume')
+  fullOutputVolume = fullfile(pathToWorkspace, config.outputVolume);
   command = sprintf('%s %s', command, fullOutputVolume);
 end
 

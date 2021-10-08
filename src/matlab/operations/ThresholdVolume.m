@@ -1,12 +1,9 @@
-function [status, result] = ThresholdVolume(pathToWorkspace, ...
-                                            params, ...
-                                            config)
+function [status, result] = ThresholdVolume(pathToWorkspace, config)
 %THRESHOLDVOLUME Threshold a volume.
 %   Uses `fslmaths` to threshold an volume.
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -22,9 +19,9 @@ function [status, result] = ThresholdVolume(pathToWorkspace, ...
 arguments
   pathToWorkspace char = '.'
   % filename of input image
-  params.inputVolume char
+  config.inputVolume char
   % filename of output image
-  params.outputVolume char
+  config.outputVolume char
   % zero anything below the number
 	% e.g. thr = 2 will zero values 1, 0, and under
   config.thr double
@@ -40,7 +37,7 @@ end
 verbose = config.verbose || config.v;
 
 %% main command
-fullInputVolume = fullfile(pathToWorkspace, params.inputVolume);
+fullInputVolume = fullfile(pathToWorkspace, config.inputVolume);
 command = 'fslmaths %s';
 command = sprintf(command, fullInputVolume);
 
@@ -56,7 +53,7 @@ if isfield(config, 'uthr')
 end
 
 %% output
-fullOutputVolume = fullfile(pathToWorkspace, params.outputVolume);
+fullOutputVolume = fullfile(pathToWorkspace, config.outputVolume);
 command = sprintf('%s %s', ...
                   command, ...
                   fullOutputVolume);

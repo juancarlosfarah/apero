@@ -1,12 +1,9 @@
-function [status, result] = RegressOutPca(pathToWorkspace, ...
-                                          params, ...
-                                          config)
+function [status, result] = RegressOutPca(pathToWorkspace, config)
 %REGRESSOUTPCA Summary of this function goes here
 %   Detailed explanation goes here
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -15,9 +12,9 @@ function [status, result] = RegressOutPca(pathToWorkspace, ...
 
 arguments
   pathToWorkspace char = '.'
-  params.brainVolume char
-  params.maskVolume char
-  params.outputVolume char
+  config.brainVolume char
+  config.maskVolume char
+  config.outputVolume char
   config.numComponents double {mustBeInteger} = 5
   config.pcaFiles cell = {}
   % switch on diagnostic messages
@@ -28,13 +25,13 @@ end
 status = 0;
 
 pcaFiles = config.pcaFiles;
-brainVolume = MRIread(fullfile(pathToWorkspace, params.brainVolume));
-maskVolume = MRIread(fullfile(pathToWorkspace, params.maskVolume));
+brainVolume = MRIread(fullfile(pathToWorkspace, config.brainVolume));
+maskVolume = MRIread(fullfile(pathToWorkspace, config.maskVolume));
 
 % count number of time points
 [~, ~, ~, numTimePoints] = size(brainVolume.vol);
 
-[mask, ~] = Generate4dMask(fullfile(pathToWorkspace, params.maskVolume), ...
+[mask, ~] = Generate4dMask(fullfile(pathToWorkspace, config.maskVolume), ...
                            numTimePoints);
 
 % set voxels outside the brain to 0
@@ -62,7 +59,7 @@ brainVolume.vol = ApplyRegressors(brainVolume.vol, ...
                                   maskVolume.vol, ...
                                   regressors);
 
-outputVolume = fullfile(pathToWorkspace, params.outputVolume);
+outputVolume = fullfile(pathToWorkspace, config.outputVolume);
 
 % write brain volume with regressors applied
 err = MRIwrite(brainVolume, outputVolume, 'double');

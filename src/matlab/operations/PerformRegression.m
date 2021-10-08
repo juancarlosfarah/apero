@@ -1,12 +1,9 @@
-function [status, result] = PerformRegression(pathToWorkspace, ...
-                                              params, ...
-                                              config)
+function [status, result] = PerformRegression(pathToWorkspace, config)
 %PERFORMREGRESSION Summary of this function goes here
 %   Detailed explanation goes here
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -15,9 +12,9 @@ function [status, result] = PerformRegression(pathToWorkspace, ...
 
 arguments
   pathToWorkspace char = '.'
-  params.brainVolume char
-  params.maskVolume char
-  params.outputVolume char
+  config.brainVolume char
+  config.maskVolume char
+  config.outputVolume char
   % only regress if less than a threshold of outliers
   config.threshold double {mustBeInRange(config.threshold, 0, 1)} = 1
   config.outlierFiles cell = {}
@@ -33,13 +30,13 @@ status = 0;
 
 outlierFiles = config.outlierFiles;
 regressorFiles = config.regressorFiles;
-brainVolume = MRIread(fullfile(pathToWorkspace, params.brainVolume));
-maskVolume = MRIread(fullfile(pathToWorkspace, params.maskVolume));
+brainVolume = MRIread(fullfile(pathToWorkspace, config.brainVolume));
+maskVolume = MRIread(fullfile(pathToWorkspace, config.maskVolume));
 
 % count number of time points
 [~, ~, ~, numTimePoints] = size(brainVolume.vol);
 
-[mask, ~] = Generate4dMask(fullfile(pathToWorkspace, params.maskVolume), ...
+[mask, ~] = Generate4dMask(fullfile(pathToWorkspace, config.maskVolume), ...
                            numTimePoints);
 
 % set voxels outside the brain to 0
@@ -116,7 +113,7 @@ if (nnz(outliers) / length(outliers)) < config.threshold
                                     regressorsNormalized, ...
                                     nonOutliers);
 
-  outputVolume = fullfile(pathToWorkspace, params.outputVolume);
+  outputVolume = fullfile(pathToWorkspace, config.outputVolume);
   % write brain volume with regressors applied
   err = MRIwrite(brainVolume, outputVolume, 'double');
 

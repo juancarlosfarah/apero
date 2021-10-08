@@ -1,6 +1,4 @@
-function [status, result] = ProcessAnatomicalImage(pathToWorkspace, ...
-                                                   params, ...
-                                                   config)
+function [status, result] = ProcessAnatomicalImage(pathToWorkspace, config)
 %PROCESSANATOMICALIMAGE Processes an anatomical image using `fsl_anat`.
 %   Uses `fsl_anat` to process an anatomical image.
 %   
@@ -9,18 +7,17 @@ function [status, result] = ProcessAnatomicalImage(pathToWorkspace, ...
 %   explanatory message in result.
 %
 %   Input:
-%   - pathToWorkspace:  ...
-%   - params:           ...
-%   - config:           ...
+%   - pathToWorkspace:  Path to the workspace.
+%   - config:           Configuration to be used in the operation.
 %
 %   Output:
-%   - status:  ...
-%   - result:  ...  
+%   - status:  Status returned by system call.
+%   - result:  Result returned by system call.
 
 arguments
   pathToWorkspace string = '.'
-  params.inputFile string
-  params.outputFolder string
+  config.inputFile string
+  config.outputFolder string
   config.clobber logical = true
   config.noReg logical = true
   config.noNonLinReg logical = true
@@ -38,8 +35,8 @@ end
 % input:  T1_denoised (file)
 % output: T1_denoised.anat (directory)
 
-fullInputFile = fullfile(pathToWorkspace, params.inputFile);
-fullOutputFolder = fullfile(pathToWorkspace, params.outputFolder);
+fullInputFile = fullfile(pathToWorkspace, config.inputFile);
+fullOutputFolder = fullfile(pathToWorkspace, config.outputFolder);
 command = 'fsl_anat';
 
 % if .anat directory exist then delete it and make a new one

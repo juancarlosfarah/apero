@@ -1,23 +1,20 @@
-function [status, result] = DenoiseImage(pathToWorkspace, ...
-                                         params, ...
-                                         config)
+function [status, result] = DenoiseImage(pathToWorkspace, config)
 % DENOISEIMAGE Denoises the volume inside an NIfTI image.
 %
 %   Input:
-%   - pathToWorkspace:  ...
-%   - params:           ...
-%   - config:           ...
+%   - pathToWorkspace:  Path to the workspace.
+%   - config:           Configuration to be used in the operation.
 %
 %   Output:
-%   - success:  ...
-%   - result:   ...
+%   - status:  Status returned.
+%   - result:  Result returned.
 
 arguments
   % has to be char due to issue with single vs double quotes
   % see more: github.com/juancarlosfarah/apero/issues/1
   pathToWorkspace char = '.'
-  params.inputFile char
-  params.outputFile char
+  config.inputFile char
+  config.outputFile char
   config.beta double = 1
   config.patchRadius int8 = 1
   config.searchRadius int8 = 1
@@ -25,8 +22,8 @@ arguments
   config.verbose logical = false
 end
 
-inputFile = params.inputFile;
-outputFile = params.outputFile;
+inputFile = config.inputFile;
+outputFile = config.outputFile;
 
 % todo: capture failure
 image = MRIread(fullfile(pathToWorkspace, inputFile));

@@ -1,6 +1,4 @@
-function [status, result] = CorrectSliceTiming(pathToWorkspace, ...
-                                               params, ...
-                                               config)
+function [status, result] = CorrectSliceTiming(pathToWorkspace, config)
 %CORRECTSLICETIMING Corrects slice timing.
 %   Uses `slicetimer` to correct a timeseries.
 %
@@ -8,7 +6,6 @@ function [status, result] = CorrectSliceTiming(pathToWorkspace, ...
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -21,8 +18,8 @@ function [status, result] = CorrectSliceTiming(pathToWorkspace, ...
 
 arguments
   pathToWorkspace char = '.'
-  params.inputVolume char
-  params.outputVolume char
+  config.inputVolume char
+  config.outputVolume char
   % use interleaved acquisition
   config.odd logical = false
   % reverse slice indexing
@@ -42,13 +39,13 @@ end
 % normalize if multiple options mean the same thing
 verbose = config.verbose || config.v;
 
-fullInputVolume = fullfile(pathToWorkspace, params.inputVolume);
+fullInputVolume = fullfile(pathToWorkspace, config.inputVolume);
 
 command = 'slicetimer -i %s';
 command = sprintf(command, fullInputVolume);
 
-if isfield(params, 'outputVolume')
-  fullOutputVolume = fullfile(pathToWorkspace, params.outputVolume);
+if isfield(config, 'outputVolume')
+  fullOutputVolume = fullfile(pathToWorkspace, config.outputVolume);
   command = sprintf('%s -o %s', command, fullOutputVolume);
 end
 

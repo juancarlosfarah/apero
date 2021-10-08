@@ -1,11 +1,8 @@
-function [status, result] = ThresholdClusters(pathToWorkspace, ...
-                                              params, ...
-                                              config)
+function [status, result] = ThresholdClusters(pathToWorkspace, config)
 %THRESHOLDCLUSTERS Summary of this function goes here
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -15,9 +12,9 @@ function [status, result] = ThresholdClusters(pathToWorkspace, ...
 arguments
   pathToWorkspace char = '.'
   % filename of input image
-  params.inputVolume char
+  config.inputVolume char
   % filename of output image
-  params.outputVolume char
+  config.outputVolume char
   % only keep regions that have voxels above the threshold
   config.threshold int8 = 0
   % switch on diagnostic messages
@@ -29,8 +26,8 @@ end
 verbose = config.verbose || config.v;
 threshold = config.threshold;
 
-fullInputVolume = fullfile(pathToWorkspace, params.inputVolume);
-fullOutputVolume = fullfile(pathToWorkspace, params.outputVolume);
+fullInputVolume = fullfile(pathToWorkspace, config.inputVolume);
+fullOutputVolume = fullfile(pathToWorkspace, config.outputVolume);
 
 v = MRIread(fullInputVolume);
 

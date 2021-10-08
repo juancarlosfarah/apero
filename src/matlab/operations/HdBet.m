@@ -1,17 +1,14 @@
-function [status, result] = HdBet(pathToWorkspace, ...
-                                  params, ...
-                                  config)
+function [status, result] = HdBet(pathToWorkspace, config)
 %HDBET Extracts brain using HD-BET.
 %   Extracts brain from fMRI data using MIC-DKFZ's `hd-bet`.
 %
 %   Input:
-%   - pathToWorkspace:  ...
-%   - params:           ...
-%   - config:           ...
+%   - pathToWorkspace:  Path to the workspace.
+%   - config:           Configuration to be used in the operation.
 %
 %   Output:
-%   - status:  ...
-%   - result:   ...  
+%   - status:  Status returned by system call.
+%   - result:  Result returned by system call.
 
 % Message from the authors of `hd-bet`:
 % ########################
@@ -28,10 +25,10 @@ arguments
   % nifti (.nii.gz) and can only be 3D. No support for 4d images, use
   % fslsplit to split 4d sequences into 3d images. If folder: all files
   % ending with .nii.gz within that folder will be brain extracted.
-  params.input char
+  config.input char
   % can be either a filename or a folder
   % if it does not exist, the folder will be created
-  params.output char
+  config.output char
   % can be either 'fast' or 'accurate'. Fast will use only one set of
   % parameters whereas accurate will use the five sets of parameters that
   % resulted from our cross-validation as an ensemble.
@@ -59,8 +56,8 @@ end
 verbose = config.verbose || config.v;
 
 %% main command
-fullInputFile = fullfile(pathToWorkspace, params.input);
-fullOutputFile = fullfile(pathToWorkspace, params.output);
+fullInputFile = fullfile(pathToWorkspace, config.input);
+fullOutputFile = fullfile(pathToWorkspace, config.output);
 command = 'hd-bet -i %s -o %s';
 command = sprintf(command, fullInputFile, fullOutputFile);
 

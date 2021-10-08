@@ -1,12 +1,9 @@
-function [status, result] = Binarize(pathToWorkspace, ...
-                                     params, ...
-                                     config)
+function [status, result] = Binarize(pathToWorkspace, config)
 %BINARIZE Binarize an image.
 %   Uses `fslmaths` to binarize an image.
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -16,9 +13,9 @@ function [status, result] = Binarize(pathToWorkspace, ...
 arguments
   pathToWorkspace char = '.'
   % filename of input image
-  params.inputVolume char
+  config.inputVolume char
   % filename of output image
-  params.outputVolume char
+  config.outputVolume char
   % switch on diagnostic messages
   config.verbose logical = false
   config.v logical = false
@@ -28,8 +25,8 @@ end
 verbose = config.verbose || config.v;
 
 %% main command
-fullInputVolume = fullfile(pathToWorkspace, params.inputVolume);
-fullOutputVolume = fullfile(pathToWorkspace, params.outputVolume);
+fullInputVolume = fullfile(pathToWorkspace, config.inputVolume);
+fullOutputVolume = fullfile(pathToWorkspace, config.outputVolume);
 command = 'fslmaths %s -bin %s';
 command = sprintf(command, fullInputVolume, fullOutputVolume);
 

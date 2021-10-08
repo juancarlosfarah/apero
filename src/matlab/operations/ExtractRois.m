@@ -1,12 +1,9 @@
-function [status, result] = ExtractRois(pathToWorkspace, ...
-                                        params, ...
-                                        config)
+function [status, result] = ExtractRois(pathToWorkspace, config)
 %EXTRACTROIS Summary of this function goes here
 %   Detailed explanation goes here%   Detailed explanation goes here
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -15,10 +12,10 @@ function [status, result] = ExtractRois(pathToWorkspace, ...
 
 arguments
   pathToWorkspace char = '.'
-  params.brainVolume char
-  params.parcellationVolume char
-  params.referenceVolume char
-  params.outputFile char
+  config.brainVolume char
+  config.parcellationVolume char
+  config.referenceVolume char
+  config.outputFile char
   config.maskVolumes cell = {}
   % switch on diagnostic messages
   config.verbose logical = false
@@ -28,9 +25,9 @@ end
 status = 0;
 
 % read files and get metadata
-brainVolume = MRIread(fullfile(pathToWorkspace, params.brainVolume));
-referenceVolume = MRIread(fullfile(pathToWorkspace, params.referenceVolume));
-parc = MRIread(fullfile(pathToWorkspace, params.parcellationVolume));
+brainVolume = MRIread(fullfile(pathToWorkspace, config.brainVolume));
+referenceVolume = MRIread(fullfile(pathToWorkspace, config.referenceVolume));
+parc = MRIread(fullfile(pathToWorkspace, config.parcellationVolume));
 
 [sizeX, sizeY, sizeZ, numTimePoints] = size(brainVolume.vol);
 
@@ -69,7 +66,7 @@ for timePoint = 1 : numTimePoints
 end
 
 % save resulting variables to file
-save(fullfile(pathToWorkspace, params.outputFile), 'rois', 'numVoxels');
+save(fullfile(pathToWorkspace, config.outputFile), 'rois', 'numVoxels');
 
 result = 'ExtractRois: saved result of extraction';
 if config.verbose

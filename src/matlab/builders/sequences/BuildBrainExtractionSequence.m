@@ -17,106 +17,91 @@ function [sequence] = BuildBrainExtractionSequence(inputs, ...
 
 %% step 1
 % reorient to standard
-step1Params = struct();
 step1Config = config.step1;
-step1Params.inputVolume = sprintf('%s_T1w.nii.gz', subjectName);
-step1Params.outputVolume = sprintf('%s_T1w_std.nii.gz', subjectName);
-deps1 = { step1Params.inputVolume };
-outputs1 = { step1Params.outputVolume };
+step1Config.inputVolume = sprintf('%s_T1w.nii.gz', subjectName);
+step1Config.outputVolume = sprintf('%s_T1w_std.nii.gz', subjectName);
+deps1 = { step1Config.inputVolume };
+outputs1 = { step1Config.outputVolume };
 step1 = Step(@ReorientToStandard, ...
-             step1Params, ...
-             deps1, ...
              step1Config, ...
+             deps1, ...
              outputs1);
 
 %% step 2
 % crop
-step2Params = struct();
 step2Config = config.step2;
-step2Params.inputVolume = step1Params.outputVolume;
-step2Params.outputVolume = sprintf('%s_T1w_crop.nii.gz', subjectName);
-deps2 = { step2Params.inputVolume };
-outputs2 = { step2Params.outputVolume };
+step2Config.inputVolume = step1Config.outputVolume;
+step2Config.outputVolume = sprintf('%s_T1w_crop.nii.gz', subjectName);
+deps2 = { step2Config.inputVolume };
+outputs2 = { step2Config.outputVolume };
 step2 = Step(@Crop, ...
-             step2Params, ...
-             deps2, ...
              step2Config, ...
+             deps2, ...
              outputs2);
 
 %% step 3
 % denoise
-step3Params = struct();
 step3Config = config.step3;
-step3Params.inputFile = step2Params.outputVolume;
-step3Params.outputFile = sprintf('%s_T1w_denoised.nii', subjectName);
-deps3 = { step3Params.inputFile };
-outputs3 = { step3Params.outputFile };
+step3Config.inputFile = step2Config.outputVolume;
+step3Config.outputFile = sprintf('%s_T1w_denoised.nii', subjectName);
+deps3 = { step3Config.inputFile };
+outputs3 = { step3Config.outputFile };
 step3 = Step(@DenoiseImage, ...
-             step3Params, ...
-             deps3, ...
              step3Config, ...
+             deps3, ...
              outputs3);
 
 %% step 4
 % process anatomical image
-step4Params = struct();
 step4Config = config.step4;
-step4Params.inputFile = step3Params.outputFile;
-step4Params.outputFolder = sprintf('%s', subjectName);
-deps4 = { step4Params.inputFile };
+step4Config.inputFile = step3Config.outputFile;
+step4Config.outputFolder = sprintf('%s', subjectName);
+deps4 = { step4Config.inputFile };
 outputs4 = { ...
   sprintf('%s.anat/T1_biascorr.nii.gz', subjectName), ...
   sprintf('%s.anat/T1_subcort_seg.nii.gz', subjectName), ...
 };
 step4 = Step(@ProcessAnatomicalImage, ...
-             step4Params, ...
-             deps4, ...
              step4Config, ...
+             deps4, ...
              outputs4);
 
 %% step 5
 % extract brain
-step5Params = struct();
-% you can also assign a dedicated step configuration object
 step5Config = config.step5;
-step5Params.inputVolume = sprintf('%s.anat/T1_biascorr.nii.gz', subjectName);
-step5Params.outputVolume = sprintf('%s_T1w_brain.nii.gz', subjectName);
-deps5 = { step5Params.inputVolume };
-outputs5 = { step5Params.outputVolume };
+step5Config.inputVolume = sprintf('%s.anat/T1_biascorr.nii.gz', subjectName);
+step5Config.outputVolume = sprintf('%s_T1w_brain.nii.gz', subjectName);
+deps5 = { step5Config.inputVolume };
+outputs5 = { step5Config.outputVolume };
 step5 = Step(@ExtractBrain, ...
-             step5Params, ...
-             deps5, ...
              step5Config, ...
+             deps5, ...
              outputs5);
 
 %% step 6
 % fill holes
-step6Params = struct();
 step6Config = config.step6;
-step6Params.inputVolume = sprintf('%s_T1w_brain_mask.nii.gz', subjectName);
-step6Params.outputVolume = sprintf('%s_T1w_brain_mask_filled.nii.gz', subjectName);
-deps6 = { step6Params.inputVolume };
-outputs6 = { step6Params.outputVolume };
+step6Config.inputVolume = sprintf('%s_T1w_brain_mask.nii.gz', subjectName);
+step6Config.outputVolume = sprintf('%s_T1w_brain_mask_filled.nii.gz', subjectName);
+deps6 = { step6Config.inputVolume };
+outputs6 = { step6Config.outputVolume };
 step6 = Step(@FillHoles, ...
-             step6Params, ...
-             deps6, ...
              step6Config, ...
+             deps6, ...
              outputs6);
 
 %% step 7
 % multiply brain by mask
 % extra step to be very precise on the extraction
-step7Params = struct();
 step7Config = config.step7;
-step7Params.inputVolume1 = sprintf('%s.anat/T1_biascorr.nii.gz', subjectName);
-step7Params.inputVolume2 = sprintf('%s_T1w_brain_mask_filled.nii.gz', subjectName);
-step7Params.outputVolume = sprintf('%s_T1w_brain_trim.nii.gz', subjectName);
-deps7 = { step7Params.inputVolume1, step7Params.inputVolume2 };
-outputs7 = { step7Params.outputVolume };
+step7Config.inputVolume1 = sprintf('%s.anat/T1_biascorr.nii.gz', subjectName);
+step7Config.inputVolume2 = sprintf('%s_T1w_brain_mask_filled.nii.gz', subjectName);
+step7Config.outputVolume = sprintf('%s_T1w_brain_trim.nii.gz', subjectName);
+deps7 = { step7Config.inputVolume1, step7Config.inputVolume2 };
+outputs7 = { step7Config.outputVolume };
 step7 = Step(@MultiplyVolumes, ...
-             step7Params, ...
-             deps7, ...
              step7Config, ...
+             deps7, ...
              outputs7);
 
 % set up steps in order

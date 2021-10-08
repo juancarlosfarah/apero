@@ -1,5 +1,4 @@
 function [status, result] = PerformLinearImageRegistration(pathToWorkspace, ...
-                                                           params, ...
                                                            config)
 %PERFORMLINEARIMAGEREGISTRATION Perform linear image registration using `flirt`.
 %   Uses `flirt` to perform linear image registration.
@@ -8,13 +7,12 @@ function [status, result] = PerformLinearImageRegistration(pathToWorkspace, ...
 %   explanatory message in result.
 %
 %   Input:
-%   - pathToWorkspace:  ...
-%   - params:           ...
-%   - config:           ...
+%   - pathToWorkspace:  Path to the workspace.
+%   - config:           Configuration to be used in the operation.
 %
 %   Output:
-%   - status:  ...
-%   - result:  ...  
+%   - status:  Status returned by system call.
+%   - result:  Result returned by system call.
 %
 % Usage: flirt [options] -in <inputvol> -ref <refvol> -out <outputvol>
 %        flirt [options] -in <inputvol> -ref <refvol> -omat <outputmatrix>
@@ -56,12 +54,12 @@ function [status, result] = PerformLinearImageRegistration(pathToWorkspace, ...
 
 arguments
   pathToWorkspace char = '.'
-  params.inputVolume char
-  params.referenceVolume char
-  params.outputVolume char = ''
-  params.outputMatrix char = ''
+  config.inputVolume char
+  config.referenceVolume char
+  config.outputVolume char = ''
+  config.outputMatrix char = ''
   % input 4x4 affine matrix
-  params.initMatrix char = ''
+  config.initMatrix char = ''
   % number of transform degrees of freedom
   config.dof int8 = 12
   % applies transform (no optimisation) - requires -init
@@ -100,31 +98,30 @@ end
 verbose = config.verbose || config.v;
 
 %% main command
-fullInputVolume = fullfile(pathToWorkspace, params.inputVolume);
-fullReferenceVolume = fullfile(pathToWorkspace, params.referenceVolume);
+fullInputVolume = fullfile(pathToWorkspace, config.inputVolume);
+fullReferenceVolume = fullfile(pathToWorkspace, config.referenceVolume);
 command = 'flirt -in %s -ref %s';
 command = sprintf(command, fullInputVolume, fullReferenceVolume);
 
-%% secondary params
+%% options
 % input 4x4 affine matrix
-if ~isempty(params.initMatrix)
-  fullInitMatrix = fullfile(pathToWorkspace, params.initMatrix);
+if ~isempty(config.initMatrix)
+  fullInitMatrix = fullfile(pathToWorkspace, config.initMatrix);
   command = sprintf('%s -init %s', command, fullInitMatrix);
 end
 
 % output volume
-if ~isempty(params.outputVolume)
-  fullOutputVolume = fullfile(pathToWorkspace, params.outputVolume);
+if ~isempty(config.outputVolume)
+  fullOutputVolume = fullfile(pathToWorkspace, config.outputVolume);
   command = sprintf('%s -o %s', command, fullOutputVolume);
 end
 
 % output in 4x4 ascii format
-if ~isempty(params.outputMatrix)
-  fullOutputMatrix = fullfile(pathToWorkspace, params.outputMatrix);
+if ~isempty(config.outputMatrix)
+  fullOutputMatrix = fullfile(pathToWorkspace, config.outputMatrix);
   command = sprintf('%s -omat %s', command, fullOutputMatrix);
 end
 
-%% options
 % number of transform degrees of freedom
 if config.dof
   command = sprintf('%s -dof %d', command, config.dof);
@@ -141,7 +138,7 @@ command = sprintf('%s -cost %s', command, config.cost);
 % applies transform (no optimisation)
 if config.applyxfm
   % requires init
-  if isempty(params.initMatrix)
+  if isempty(config.initMatrix)
     % todo: throw error
     error = 'PerformLinearImageRegistration: applyxfm requires initMatrix parameter\n';
     fprintf(error);

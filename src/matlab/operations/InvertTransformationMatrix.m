@@ -1,12 +1,10 @@
 function [status, result] = InvertTransformationMatrix(pathToWorkspace, ...
-                                                       params, ...
                                                        config)
 %INVERTTRANSFORMATIONMATRIX Invert a transformation matrix.
 %   Uses `convert_xfm` with `inverse` to invert a transformation matrix.
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -15,13 +13,13 @@ function [status, result] = InvertTransformationMatrix(pathToWorkspace, ...
 
 arguments
   pathToWorkspace char = '.'
-  params.inputMatrix char = ''
-  params.outputMatrix char = ''
+  config.inputMatrix char = ''
+  config.outputMatrix char = ''
   config.verbose logical = false
 end
 
-fullInputMatrix = fullfile(pathToWorkspace, params.inputMatrix);
-fullOutputMatrix = fullfile(pathToWorkspace, params.outputMatrix);
+fullInputMatrix = fullfile(pathToWorkspace, config.inputMatrix);
+fullOutputMatrix = fullfile(pathToWorkspace, config.outputMatrix);
 
 command = 'convert_xfm -omat %s -inverse %s';
 sentence = sprintf(command, fullOutputMatrix, fullInputMatrix);

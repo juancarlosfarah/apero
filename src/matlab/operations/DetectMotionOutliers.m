@@ -1,12 +1,9 @@
-function [status, result] = DetectMotionOutliers(pathToWorkspace, ...
-                                                 params, ...
-                                                 config)
+function [status, result] = DetectMotionOutliers(pathToWorkspace, config)
 %DETECTMOTIONOUTLIERS Detect motion outliers.
 %   Uses `fsl_motion_outliers` to detect motion outliers.
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -20,11 +17,11 @@ function [status, result] = DetectMotionOutliers(pathToWorkspace, ...
 arguments
   pathToWorkspace char = '.'
   % filename for input
-  params.inputVolume char
+  config.inputVolume char
   % path for output
-  params.outputPath char
+  config.outputPath char
   % use supplied mask image for calculating metric
-  params.maskVolume char
+  config.maskVolume char
   % type of metric
   config.metric char {mustBeMember(config.metric, { ...
     'refrms', ... % use RMS intensity difference to reference volume
@@ -38,8 +35,8 @@ arguments
   config.verbose logical = false
 end
 
-inputVolume = fullfile(pathToWorkspace, params.inputVolume);
-outputPath = fullfile(pathToWorkspace, params.outputPath);
+inputVolume = fullfile(pathToWorkspace, config.inputVolume);
+outputPath = fullfile(pathToWorkspace, config.outputPath);
 metric = config.metric;
 verbose = config.verbose;
 
@@ -84,8 +81,8 @@ command = sprintf(command, ...
                   metric);
 
 % use supplied mask image for calculating metric
-if isfield(params, 'maskVolume')
-  maskVolume = fullfile(pathToWorkspace, params.maskVolume);
+if isfield(config, 'maskVolume')
+  maskVolume = fullfile(pathToWorkspace, config.maskVolume);
   command = sprintf('%s -m %s', command, maskVolume);
 end
 

@@ -1,12 +1,9 @@
-function [status, result] = Dilate(pathToWorkspace, ...
-                                   params, ...
-                                   config)
+function [status, result] = Dilate(pathToWorkspace, config)
 %DILATE Dilate a volume one or more times.
 %   Uses `fslmaths` to dilate a volume.
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -16,9 +13,9 @@ function [status, result] = Dilate(pathToWorkspace, ...
 arguments
   pathToWorkspace char = '.'
   % filename for input
-  params.inputVolume char
+  config.inputVolume char
   % filename for output
-  params.outputVolume char
+  config.outputVolume char
   % type of dilation
   config.type char {mustBeMember(config.type, { ...
     'dilM', ... % mean dilation of non-zero voxels
@@ -33,8 +30,8 @@ end
 % assume all went well
 success = true;
 
-fullInputVolume = fullfile(pathToWorkspace, params.inputVolume);
-fullOutputVolume = fullfile(pathToWorkspace, params.outputVolume);
+fullInputVolume = fullfile(pathToWorkspace, config.inputVolume);
+fullOutputVolume = fullfile(pathToWorkspace, config.outputVolume);
 results = cell(1, config.numDilations);
 verbose = config.verbose || config.v;
 

@@ -1,12 +1,9 @@
-function [status, result] = AddVolumes(pathToWorkspace, ...
-                                       params, ...
-                                       config)
+function [status, result] = AddVolumes(pathToWorkspace, config)
 %ADDVOLUMES Add two volumes.
 %   Uses `fslmaths` with `add` to add two volumes.
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -15,9 +12,9 @@ function [status, result] = AddVolumes(pathToWorkspace, ...
 
 arguments
   pathToWorkspace char = '.'
-  params.inputVolume1 char
-  params.inputVolume2 char
-  params.outputVolume char
+  config.inputVolume1 char
+  config.inputVolume2 char
+  config.outputVolume char
   % switch on diagnostic messages
   config.verbose logical = false
   config.v logical = false
@@ -26,9 +23,9 @@ end
 % normalize if multiple options mean the same thing
 verbose = config.verbose || config.v;
 
-fullInputVolume1 = fullfile(pathToWorkspace, params.inputVolume1);
-fullInputVolume2 = fullfile(pathToWorkspace, params.inputVolume2);
-fullOutputVolume = fullfile(pathToWorkspace, params.outputVolume);
+fullInputVolume1 = fullfile(pathToWorkspace, config.inputVolume1);
+fullInputVolume2 = fullfile(pathToWorkspace, config.inputVolume2);
+fullOutputVolume = fullfile(pathToWorkspace, config.outputVolume);
 
 command = 'fslmaths %s -add %s %s';
 sentence = sprintf(command, fullInputVolume1, fullInputVolume2, fullOutputVolume);

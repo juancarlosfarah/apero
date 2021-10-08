@@ -1,12 +1,9 @@
-function [status, result] = InvertWarp(pathToWorkspace, ...
-                                       params, ...
-                                       config)
+function [status, result] = InvertWarp(pathToWorkspace, config)
 %INVERTWARP Invert a non-linear mapping.
 %   Uses `invwarp` to invert a non-linear mapping.
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -23,12 +20,12 @@ function [status, result] = InvertWarp(pathToWorkspace, ...
 arguments
   pathToWorkspace char = '.'
   % filename for warp/shiftmap transform (volume)
-  params.warpVolume char
+  config.warpVolume char
   % filename for output (inverse warped) image
-  params.outputVolume char
+  config.outputVolume char
   % filename for new reference image, i.e., what was originally the input image
   % (determines inverse warpvol's FOV and pixdims)
-  params.referenceVolume char
+  config.referenceVolume char
   % turn on debugging output
   config.debug logical = false
   config.d logical = false
@@ -37,9 +34,9 @@ arguments
   config.v logical = false
 end
 
-fullWarpVolume = fullfile(pathToWorkspace, params.warpVolume);
-fullReferenceVolume = fullfile(pathToWorkspace, params.referenceVolume);
-fullOutputVolume = fullfile(pathToWorkspace, params.outputVolume);
+fullWarpVolume = fullfile(pathToWorkspace, config.warpVolume);
+fullReferenceVolume = fullfile(pathToWorkspace, config.referenceVolume);
+fullOutputVolume = fullfile(pathToWorkspace, config.outputVolume);
 
 command = 'invwarp --warp=%s --ref=%s --out=%s';
 command = sprintf(command, ...

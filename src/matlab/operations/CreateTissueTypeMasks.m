@@ -1,12 +1,9 @@
-function [status, result] = CreateTissueTypeMasks(pathToWorkspace, ...
-                                                         params, ...
-                                                         config)
+function [status, result] = CreateTissueTypeMasks(pathToWorkspace, config)
 %CREATETISSUETYPEMASKS Creates masks by tissue type from a volume.
 %   Uses `fslmaths` to create masks from a volume following integer labels.
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -17,7 +14,7 @@ function [status, result] = CreateTissueTypeMasks(pathToWorkspace, ...
 arguments
   pathToWorkspace char = '.'
   % filename of input image (to be masked)
-  params.inputVolume char
+  config.inputVolume char
   config.tissueTypeLabels cell = { 'csf', 'gm', 'wm' }
   config.startTypeValue int8 {mustBePositive} = 1
   config.endTypeValue int8 {mustBePositive} = 3
@@ -49,7 +46,7 @@ numValuesToConsider = endTypeValue - startTypeValue + 1;
 results = cell(1, numValuesToConsider);
 
 % full input
-fullInputVolume = fullfile(pathToWorkspace, params.inputVolume);
+fullInputVolume = fullfile(pathToWorkspace, config.inputVolume);
 
 % create each mask
 for i = startTypeValue : endTypeValue

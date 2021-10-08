@@ -1,12 +1,9 @@
-function [status, result] = CreateSegmentation(pathToWorkspace, ...
-                                               params, ...
-                                               config)
+function [status, result] = CreateSegmentation(pathToWorkspace, config)
 %CREATESEGMENTATION Segment an image.
 %   Uses `fast` to create a segmentation.
 %
 %   Input:
 %   - pathToWorkspace:  Path to the workspace.
-%   - params:           Parameters to be used in the operation.
 %   - config:           Configuration to be used in the operation.
 %
 %   Output:
@@ -34,7 +31,7 @@ function [status, result] = CreateSegmentation(pathToWorkspace, ...
 arguments
   pathToWorkspace char = '.'
   % filename of input image
-  params.inputVolume char
+  config.inputVolume char
   % output basename
   config.out char
   % type of image 1=T1, 2=T2, 3=PD
@@ -86,7 +83,7 @@ if verbose
 end
 
 % add inputs at the end
-fullInputVolume = fullfile(pathToWorkspace, params.inputVolume);
+fullInputVolume = fullfile(pathToWorkspace, config.inputVolume);
 command = sprintf('%s %s', ...
                   command, ...
                   fullInputVolume);
