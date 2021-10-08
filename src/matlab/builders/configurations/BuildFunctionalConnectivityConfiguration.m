@@ -18,6 +18,9 @@ pathToDataset = fullfile(pathToDataFolder, 'input');
 % for intermediary pipelines, send output to the transfer folder
 pathToOutput = fullfile(pathToDataFolder, 'transfer');
 
+% file containing yeo order
+yeoOrderFile = fullfile(pathToDataFolder, 'yeoOrder/yeo_RS7_Shen278.mat');
+
 %% pipeline: functional connectivity
 % common configuration
 config.verbose = true;
@@ -377,24 +380,30 @@ config.step41.clobber = config.clobber;
 config.step41.verbose = config.verbose;
 
 %% step 42
-% extract rois
+% extract rois pca1
 config.step42.optional = false;
 config.step42.skip = false;
 config.step42.clobber = config.clobber;
 config.step42.verbose = config.verbose;
+config.step42.saveConnectome = true;
+config.step42.yeoOrderFile = yeoOrderFile;
 
 %% step 43
-% extract rois
+% extract rois pca3
 config.step43.optional = false;
 config.step43.skip = false;
 config.step43.clobber = config.clobber;
 config.step43.verbose = config.verbose;
+config.step43.saveConnectome = true;
+config.step43.yeoOrderFile = yeoOrderFile;
 
 %% step 44
-% extract rois
+% extract rois pca5
 config.step44.optional = false;
 config.step44.skip = false;
 config.step44.clobber = config.clobber;
 config.step44.verbose = config.verbose;
+config.step44.saveConnectome = true;
+config.step44.yeoOrderFile = yeoOrderFile;
 
 end

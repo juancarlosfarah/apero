@@ -17,6 +17,9 @@ arguments
   config.referenceVolume char
   config.outputFile char
   config.maskVolumes cell = {}
+  config.saveConnectome logical = false
+  config.outputConnectomeName char
+  config.yeoOrderFile char
   % switch on diagnostic messages
   config.verbose logical = false
 end
@@ -67,6 +70,19 @@ end
 
 % save resulting variables to file
 save(fullfile(pathToWorkspace, config.outputFile), 'rois', 'numVoxels');
+
+if config.saveConnectome
+  load(config.yeoOrderFile, 'yeoOrder');
+
+  fc = corr(rois');
+
+  f = figure('visible', 'off');
+  imagesc(fc(yeoOrder, yeoOrder), [-.7, .7]);
+  axis square;
+
+  outputFigure = fullfile(pathToWorkspace, config.outputConnectomeName);
+  saveas(f, outputFigure, 'png');
+end
 
 result = 'ExtractRois: saved result of extraction';
 if config.verbose
