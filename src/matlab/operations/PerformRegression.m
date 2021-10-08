@@ -125,12 +125,17 @@ if (nnz(outliers) / length(outliers)) < config.threshold
     return
   end
 
+  result = 'PerformRegression: saved result of regression';
 else
+  % signal step failure
+  status = 1;
+  
   % signal too many outliers
-  fprintf('file %s contains more outliers (%0.2f) than the threshold (%0.2f)\n', ...
-          inputPath, ...
-          nnz(outliers) / length(outliers), ...
-          config.threshold)
+  msg = sprintf('file %s contains more outliers (%0.2f) than the threshold (%0.2f)\n', ...
+                inputPath, ...
+                nnz(outliers) / length(outliers), ...
+                config.threshold);
+  fprintf(msg);
   
   % save non-outliers as regressors as well as outliers
   regressorsOutputFile = fullfile(pathToWorkspace, config.regressorsOutputFile);
@@ -138,9 +143,9 @@ else
           regressorsOutputFile);
   save(fullfile(pathToWorkspace, regressorsOutputFile), 'nonOutliers');
   
+  result = sprintf('PerformRegression: %s', msg);
 end
 
-result = 'PerformRegression: saved result of regression';
 if config.verbose
   fprintf('%s\n', result);
 end
@@ -149,4 +154,3 @@ end
 save(fullfile(pathToWorkspace, config.outliersOutputFile), 'outliers');
 
 end
-
