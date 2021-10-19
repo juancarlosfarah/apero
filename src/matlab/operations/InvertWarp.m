@@ -10,7 +10,7 @@ function [status, result] = InvertWarp(pathToWorkspace, config)
 %   - status:  Status returned by system call.
 %   - result:  Result returned by system call.
 %
-% TODO:
+% todo:
 % Optional arguments (You may optionally specify one or more of):
 % 	--noconstraint	do not apply the Jacobian constraint
 
