@@ -10,12 +10,9 @@ function [status, result] = InvertWarp(pathToWorkspace, config)
 %   - status:  Status returned by system call.
 %   - result:  Result returned by system call.
 %
+% todo:
 % Optional arguments (You may optionally specify one or more of):
-% 	--rel	use relative warp convention: x' = x + w(x)
-% 	--abs	use absolute warp convention (default): x' = w(x)
 % 	--noconstraint	do not apply the Jacobian constraint
-% 	--jmin	minimum acceptable Jacobian value for constraint (default 0.01)
-% 	--jmax	maximum acceptable Jacobian value for constraint (default 100.0)
 
 arguments
   pathToWorkspace char = '.'
@@ -26,9 +23,17 @@ arguments
   % filename for new reference image, i.e., what was originally the input image
   % (determines inverse warpvol's FOV and pixdims)
   config.referenceVolume char
+  % choose either absolute x' = w(x) (default)
+  % or relative x' = x + w(x) for warp convention
+  config.abs logical = true
+  config.rel logical = false
   % turn on debugging output
   config.debug logical = false
   config.d logical = false
+  % minimum acceptable Jacobian value for constraint (default 0.01)
+  config.jmin double = 0.01
+  % maximum acceptable Jacobian value for constraint (default 100.0)
+  config.jmax double = 100.0
   % switch on diagnostic messages
   config.verbose logical = false
   config.v logical = false
@@ -43,6 +48,23 @@ command = sprintf(command, ...
                   fullWarpVolume, ...
                   fullReferenceVolume, ...
                   fullOutputVolume);
+
+% use absolute warp convention (default): x' = w(x)
+% use relative warp convention: x' = x + w(x)
+if config.rel
+  command = sprintf('%s --rel', command);
+  if config.abs
+    warning('InvertWarp: Both --abs and --rel flags are set! Defaulting to using --rel.');
+  end
+else
+  command = sprintf('%s --abs', command);
+end
+
+% minimum acceptable Jacobian value for constraint (default 0.01)
+command = sprintf('%s --jmin=%s', command, config.jmin);
+
+% maximum acceptable Jacobian value for constraint (default 100.0)
+command = sprintf('%s --jmax=%s', command, config.jmax);
 
 % turn on debugging output
 if config.debug || config.d
