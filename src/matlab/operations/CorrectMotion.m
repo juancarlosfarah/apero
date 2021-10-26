@@ -11,13 +11,11 @@ function [status, result] = CorrectMotion(pathToWorkspace, config)
 %   - result:  Result returned by system call.
 %
 % TODO:
-%   -cost {mutualinfo,woods,corratio,normcorr,normmi,leastsquares}        (default is normcorr)
 %   -bins <number of histogram bins>   (default is 256)
 %   -dof  <number of transform dofs>   (default is 6)
 %   -refvol <number of reference volume> (default is no_vols/2)- registers to (n+1)th volume in series
 %   -reffile, -r <filename>            use a separate 3d image file as the target for registration (overrides refvol option)
 %   -scaling <num>                             (6.0 is default)
-%   -smooth <num>                      (1.0 is default - controls smoothing in cost function)
 %   -rotation <num>                    specify scaling factor for rotation optimization tolerances
 %   -verbose <num>                     (0 is least and default)
 %   -stages <number of search levels>  (default is 3 - specify 4 for final sinc interpolation)
@@ -43,6 +41,17 @@ arguments
   config.meanvol logical = false
   % file to save regressors
   config.regressorsFile char
+  % cost function (default is normcorr)
+  config.cost char {mustBeMember(config.cost, { ...
+    'mutualinfo', ...
+    'woods', ...
+    'corratio', ...
+    'normcorr', ...
+    'normmi', ...
+    'leastsquares' ...
+  })} = 'normcorr'
+  % controls smoothing in cost function (1.0 is default)
+  config.smooth double = 1.0
   % switch on diagnostic messages
   config.verbose logical = false
   config.v logical = false
@@ -70,6 +79,12 @@ end
 if config.meanvol
   command = sprintf('%s -meanvol', command);
 end
+
+% cost function
+command = sprintf('%s -cost %s', command, config.cost);
+
+% cost function smoothing factor
+command = sprintf('%s -smooth %s', command, config.smooth);
 
 if verbose
   command = sprintf('%s -verbose 1 -report', command);
