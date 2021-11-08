@@ -1,4 +1,4 @@
-function [status, result] = CorrectMotion(pathToWorkspace, config)
+function [status, result, command] = CorrectMotion(pathToWorkspace, config)
 %CORRECTMOTION Motion correct a timeseries.
 %   Uses `mcflirt` to motion correct a timeseries.
 %
