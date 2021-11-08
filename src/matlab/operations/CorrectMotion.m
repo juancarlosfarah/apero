@@ -87,21 +87,21 @@ end
 command = sprintf('%s -cost %s', command, config.cost);
 
 % cost function smoothing factor
-command = sprintf('%s -smooth %s', command, config.smooth);
+command = sprintf('%s -smooth %f', command, config.smooth);
 
 % number of histogram bins (default is 256)
-command = sprintf('%s -bins %s', command, config.bins);
+command = sprintf('%s -bins %d', command, config.bins);
 
 % number of transform dofs (default is 6)
-command = sprintf('%s -dof %s', command, config.dof);
+command = sprintf('%s -dof %d', command, config.dof);
 
 % number of reference volume (default is the middle volume)
-if config.refvol
-    command = sprintf('%s -refvol %s', command, config.refvol);
+if isfield(config, 'refvol')
+    command = sprintf('%s -refvol %d', command, config.refvol);
 end
 
 % scaling (6.0 is default)
-command = sprintf('%s -scaling %s', command, config.scaling);
+command = sprintf('%s -scaling %f', command, config.scaling);
 
 % switch on diagnostic messages
 if verbose
