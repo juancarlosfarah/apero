@@ -11,13 +11,8 @@ function [status, result, command] = CorrectMotion(pathToWorkspace, config)
 %   - result:  Result returned by system call.
 %
 % TODO:
-%   -bins <number of histogram bins>   (default is 256)
-%   -dof  <number of transform dofs>   (default is 6)
-%   -refvol <number of reference volume> (default is no_vols/2)- registers to (n+1)th volume in series
 %   -reffile, -r <filename>            use a separate 3d image file as the target for registration (overrides refvol option)
-%   -scaling <num>                             (6.0 is default)
 %   -rotation <num>                    specify scaling factor for rotation optimization tolerances
-%   -verbose <num>                     (0 is least and default)
 %   -stages <number of search levels>  (default is 3 - specify 4 for final sinc interpolation)
 %   -fov <num>                         (default is 20mm - specify size of field of view when padding 2d volume)
 %   -2d                                Force padding of volume
@@ -52,6 +47,14 @@ arguments
   })} = 'normcorr'
   % controls smoothing in cost function (1.0 is default)
   config.smooth double = 1.0
+  % number of histogram bins (default is 256)
+  config.bins double = 256
+  % number of transform dofs (default is 6)
+  config.dof double = 6
+  % number of reference volume (default is no_vols/2)- registers to (n+1)th volume in series
+  config.refvol double
+  % scaling (6.0 is default)
+  config.scaling double = 6.0
   % switch on diagnostic messages
   config.verbose logical = false
   config.v logical = false
@@ -84,8 +87,23 @@ end
 command = sprintf('%s -cost %s', command, config.cost);
 
 % cost function smoothing factor
-command = sprintf('%s -smooth %s', command, config.smooth);
+command = sprintf('%s -smooth %f', command, config.smooth);
 
+% number of histogram bins (default is 256)
+command = sprintf('%s -bins %d', command, config.bins);
+
+% number of transform dofs (default is 6)
+command = sprintf('%s -dof %d', command, config.dof);
+
+% number of reference volume (default is the middle volume)
+if isfield(config, 'refvol')
+    command = sprintf('%s -refvol %d', command, config.refvol);
+end
+
+% scaling (6.0 is default)
+command = sprintf('%s -scaling %f', command, config.scaling);
+
+% switch on diagnostic messages
 if verbose
   command = sprintf('%s -verbose 1 -report', command);
 end
