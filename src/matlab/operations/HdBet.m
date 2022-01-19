@@ -1,4 +1,4 @@
-function [status, result] = HdBet(pathToWorkspace, config)
+function [status, result, command] = HdBet(pathToWorkspace, config)
 %HDBET Extracts brain using HD-BET.
 %   Extracts brain from fMRI data using MIC-DKFZ's `hd-bet`.
 %
