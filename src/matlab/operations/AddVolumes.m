@@ -1,4 +1,4 @@
-function [status, result] = AddVolumes(pathToWorkspace, config)
+function [status, result, sentence] = AddVolumes(pathToWorkspace, config)
 %ADDVOLUMES Add two volumes.
 %   Uses `fslmaths` with `add` to add two volumes.
 %
