@@ -16,8 +16,8 @@ function TestDefaultCommand(testCase)
 
   % these two steps allow us to pass a struct to the operation
   config = struct('inputVolume1', inputVolume1, ...
-                          'inputVolume2', inputVolume2, ...
-                          'outputVolume', outputVolume);
+   'inputVolume2', inputVolume2, ...
+   'outputVolume', outputVolume);
   configCell = namedargs2cell(config);
 
   % run the operation to get the actual command
@@ -28,7 +28,7 @@ function TestDefaultCommand(testCase)
   inputfile2 = fullfile(pathToWorkspace, inputVolume2);
   outputfile = fullfile(pathToWorkspace, outputVolume);
   expectedCommand = sprintf('fslmaths %s -add %s %s', ...
-                                                 inputfile1, inputfile2, outputfile);
+   inputfile1, inputfile2, outputfile);
   
   % verify equality
   verifyEqual(testCase, actualCommand, expectedCommand);
@@ -45,9 +45,9 @@ function TestSpecifyingAllOptions(testCase)
   
   % these two steps allow us to pass a struct to the operation
   config = struct('inputVolume1', inputVolume1, ...
-                          'inputVolume2', inputVolume2, ...
-                          'outputVolume', outputVolume, ...
-                          'verbose', true);
+   'inputVolume2', inputVolume2, ...
+   'outputVolume', outputVolume, ...
+   'verbose', true);
   configCell = namedargs2cell(config);
   
   % run the operation to get the actual command
@@ -58,7 +58,7 @@ function TestSpecifyingAllOptions(testCase)
   inputfile2 = fullfile(pathToWorkspace, inputVolume2);
   outputfile = fullfile(pathToWorkspace, outputVolume);
   expectedCommand = sprintf('fslmaths %s -add %s %s', ...
-                                                 inputfile1, inputfile2, outputfile);
+   inputfile1, inputfile2, outputfile);
   
   % verify equality
   verifyEqual(testCase, actualCommand, expectedCommand);
