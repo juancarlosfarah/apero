@@ -1,4 +1,4 @@
-function [status, result] = ExtractBrain(pathToWorkspace, config)
+function [status, result, command] = ExtractBrain(pathToWorkspace, config)
 %EXTRACTBRAIN Summary of this function goes here
 %   Extracts brain from fMRI data using FSL's `bet`.
 %
