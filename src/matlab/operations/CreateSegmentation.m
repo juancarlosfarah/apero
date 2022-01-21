@@ -1,4 +1,4 @@
-function [status, result] = CreateSegmentation(pathToWorkspace, config)
+function [status, result, command] = CreateSegmentation(pathToWorkspace, config)
 %CREATESEGMENTATION Segment an image.
 %   Uses `fast` to create a segmentation.
 %
@@ -52,7 +52,6 @@ verbose = config.verbose || config.v;
 
 %% main command
 command = 'fast';
-
 
 %% options
 % output basename
