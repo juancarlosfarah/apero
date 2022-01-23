@@ -1,4 +1,4 @@
-function [status, result] = ProcessAnatomicalImage(pathToWorkspace, config)
+function [status, result, sentence] = ProcessAnatomicalImage(pathToWorkspace, config)
 %PROCESSANATOMICALIMAGE Processes an anatomical image using `fsl_anat`.
 %   Uses `fsl_anat` to process an anatomical image.
 %   
