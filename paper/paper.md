@@ -29,7 +29,8 @@ bibliography: paper.bib
 
 # Summary
 Preprocessing represents the first step of every meaningful neuroimaging data analysis.
-Powerful software packages such as FSL [@jenkinson2012fsl], Freesurfer (ref) and SPM (ref) support a number of operations for preprocessing brain data. However, the variety of tools also makes it harder to keep preprocessing pipelines tidy and interpretable.
+Powerful software packages such as FSL [@jenkinson2012fsl], Freesurfer (ref) and SPM (ref) support a number of operations for preprocessing brain data.
+However, the variety of tools also makes it harder to keep preprocessing pipelines tidy and interpretable.
 Furthermore, since preprocessing pipelines need to be adjusted to the data, and different datasets may come with different file labelings, reusing an already-developed pipeline tends to be time-consuming and tedious.
 Finally, while the way how preprocessing is done can have a substantial influence on the results of the study, standardized protocols are currently not available, rendering neuroscience less reproducible.
 
