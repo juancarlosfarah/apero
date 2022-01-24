@@ -56,7 +56,7 @@ function TestSpecifyingAllOptions(testCase)
   % run the operation to get the actual command
   [~, ~, actualCommand] = PerformNonLinearImageRegistration(pathToWorkspace, configCell{:});
   
-  % this is the expected default command
+  % this is the expected command with all options
   inputfile = fullfile(pathToWorkspace, inputImage);
   referencefile = fullfile(pathToWorkspace, referenceImage);
   outputImagefile = fullfile(pathToWorkspace, outputImage);
