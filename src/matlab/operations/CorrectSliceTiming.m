@@ -1,4 +1,4 @@
-function [status, result] = CorrectSliceTiming(pathToWorkspace, config)
+function [status, result, command] = CorrectSliceTiming(pathToWorkspace, config)
 %CORRECTSLICETIMING Corrects slice timing.
 %   Uses `slicetimer` to correct a timeseries.
 %
