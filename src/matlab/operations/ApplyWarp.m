@@ -1,4 +1,4 @@
-function [status, result] = ApplyWarp(pathToWorkspace, config)
+function [status, result, command] = ApplyWarp(pathToWorkspace, config)
 %APPLYWARP Apply a non-linear mapping.
 %   Uses `applywarp` to apply a non-linear mapping.
 %
