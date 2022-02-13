@@ -1,4 +1,4 @@
-function [status, result] = BinarizeInvert(pathToWorkspace, config)
+function [status, result, command] = BinarizeInvert(pathToWorkspace, config)
 %BINARIZEINVERT Binarize and invert an image.
 %   Uses `fslmaths` to binarize and invert an image.
 %
