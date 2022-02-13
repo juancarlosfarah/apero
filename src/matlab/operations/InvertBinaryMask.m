@@ -1,4 +1,4 @@
-function [status, result] = InvertBinaryMask(pathToWorkspace, config)
+function [status, result, command] = InvertBinaryMask(pathToWorkspace, config)
 %INVERTBINARYMASK Invert a binary mask.
 %   Uses `fslmaths` to invert a binary mask.
 %
