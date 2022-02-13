@@ -1,4 +1,4 @@
-function [status, result] = ComputeMeanVolume(pathToWorkspace, config)
+function [status, result, command] = ComputeMeanVolume(pathToWorkspace, config)
 %COMPUTEMEANVOLUME Computes mean volume across the time dimension.
 %   Uses `fslmaths` with `-Tmean` to collapse the time dimension.
 %
