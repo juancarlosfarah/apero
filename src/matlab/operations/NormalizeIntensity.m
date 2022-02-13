@@ -1,4 +1,4 @@
-function [status, result] = NormalizeIntensity(pathToWorkspace, config)
+function [status, result, sentence] = NormalizeIntensity(pathToWorkspace, config)
 %NORMALIZEINTENSITY Normalize intensity.
 %   Uses `fslmaths` with `-ing` to normalize intensity.
 %
