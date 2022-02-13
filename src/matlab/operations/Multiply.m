@@ -1,4 +1,4 @@
-function [status, result] = Multiply(pathToWorkspace, config)
+function [status, result, sentence] = Multiply(pathToWorkspace, config)
 %MULTIPLY Multiply a volume by a factor.
 %   Uses `fslmaths` with `mul` to multiply a volume by a factor.
 %
