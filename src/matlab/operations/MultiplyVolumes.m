@@ -1,4 +1,4 @@
-function [status, result] = MultiplyVolumes(pathToWorkspace, config)
+function [status, result, sentence] = MultiplyVolumes(pathToWorkspace, config)
 %MULTIPLYVOLUMES Multiply two volumes.
 %   Uses `fslmaths` with `mul` to multiply two volumes.
 %
