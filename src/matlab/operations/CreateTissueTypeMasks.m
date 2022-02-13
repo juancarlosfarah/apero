@@ -1,4 +1,4 @@
-function [status, result] = CreateTissueTypeMasks(pathToWorkspace, config)
+function [status, result, commands] = CreateTissueTypeMasks(pathToWorkspace, config)
 %CREATETISSUETYPEMASKS Creates masks by tissue type from a volume.
 %   Uses `fslmaths` to create masks from a volume following integer labels.
 %
@@ -45,6 +45,9 @@ success = true;
 numValuesToConsider = endTypeValue - startTypeValue + 1;
 results = cell(1, numValuesToConsider);
 
+% store generated commands at each step (for testing)
+commands = cell(1, numValuesToConsider);
+
 % full input
 fullInputVolume = fullfile(pathToWorkspace, config.inputVolume);
 
@@ -60,6 +63,10 @@ for i = startTypeValue : endTypeValue
                      i, ...
                      fileOut);
   [sentenceStatus, result] = CallSystem(sentence, verbose);
+
+  % record command (for testing)
+  commands{1, i} = sentence;
+  
   if (sentenceStatus ~= 0)
     success = false;
     % todo: throw error
