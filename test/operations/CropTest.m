@@ -47,7 +47,7 @@ function TestSpecifyingAllOptions(testCase)
   % run the operation to get the actual command
   [~, ~, actualCommand] = Crop(pathToWorkspace, configCell{:});
 
-  % this is the expected default command
+  % this is the expected command with all options specified
   inputfile = fullfile(pathToWorkspace, inputVolume);
   outputfile = fullfile(pathToWorkspace, outputVolume);
   expectedCommand = ...
