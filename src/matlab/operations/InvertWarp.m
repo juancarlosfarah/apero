@@ -1,4 +1,4 @@
-function [status, result] = InvertWarp(pathToWorkspace, config)
+function [status, result, command] = InvertWarp(pathToWorkspace, config)
 %INVERTWARP Invert a non-linear mapping.
 %   Uses `invwarp` to invert a non-linear mapping.
 %
