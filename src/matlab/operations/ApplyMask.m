@@ -1,4 +1,4 @@
-function [status, result] = ApplyMask(pathToWorkspace, config)
+function [status, result, sentence] = ApplyMask(pathToWorkspace, config)
 %APPLYMASK Apply a mask to an image.
 %   Uses `fslmaths` to apply a mask to an image.
 %
