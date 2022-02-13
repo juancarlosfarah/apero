@@ -1,4 +1,4 @@
-function [status, result] = Crop(pathToWorkspace, config)
+function [status, result, command] = Crop(pathToWorkspace, config)
 %CROP Crop FOV of volume to remove lower head and neck.
 %   Uses `robustfov` to remove lower head and neck.
 %
