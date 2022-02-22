@@ -61,10 +61,10 @@ else
 end
 
 % minimum acceptable Jacobian value for constraint (default 0.01)
-command = sprintf('%s --jmin=%s', command, config.jmin);
+command = sprintf('%s --jmin=%0.4f', command, config.jmin);
 
 % maximum acceptable Jacobian value for constraint (default 100.0)
-command = sprintf('%s --jmax=%s', command, config.jmax);
+command = sprintf('%s --jmax=%0.4f', command, config.jmax);
 
 % turn on debugging output
 if config.debug || config.d
