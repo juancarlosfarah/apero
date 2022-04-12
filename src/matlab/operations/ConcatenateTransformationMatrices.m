@@ -1,5 +1,4 @@
-function [status, result] = ConcatenateTransformationMatrices(pathToWorkspace, ...
-                                                              config)
+function [status, result, sentence] = ConcatenateTransformationMatrices(pathToWorkspace, config)
 %CONCATENATETRANSFORMATIONMATRICES Concatenate two transformation matrices.
 %   Uses `convert_xfm` with `concat` to concatenate transformation matrices.
 %
