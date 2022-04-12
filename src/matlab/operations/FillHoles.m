@@ -1,4 +1,4 @@
-function [status, result] = FillHoles(pathToWorkspace, config)
+function [status, result, sentence] = FillHoles(pathToWorkspace, config)
 %FILLHOLES Fill holes in the volume, without changing fov.
 %   Uses `fslmaths` with `fillh` to fill holes in a volume.
 %
