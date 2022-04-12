@@ -1,5 +1,4 @@
-function [status, result] = InvertTransformationMatrix(pathToWorkspace, ...
-                                                       config)
+function [status, result, sentence] = InvertTransformationMatrix(pathToWorkspace, config)
 %INVERTTRANSFORMATIONMATRIX Invert a transformation matrix.
 %   Uses `convert_xfm` with `inverse` to invert a transformation matrix.
 %
