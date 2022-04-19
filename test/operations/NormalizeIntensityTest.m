@@ -15,9 +15,7 @@ function TestDefaultCommand(testCase)
 
   % these two steps allow us to pass a struct to the operation
   config = struct('inputVolume', inputVolume, ...
-   'outputVolume', outputVolume, ...
-   'meanIntensity', 1000, ...
-   'verbose', false);
+   'outputVolume', outputVolume);
   configCell = namedargs2cell(config);
 
   % run the operation to get the actual command
