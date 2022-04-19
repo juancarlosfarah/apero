@@ -67,7 +67,8 @@ end
 
 % filename of single-column custom interleave order file
 if isfield(config, 'ocustom')
-  command = sprintf('%s --ocustom %s', command, config.ocustom);
+  ocustomfile = fullfile(pathToWorkspace, config.ocustom);
+  command = sprintf('%s --ocustom %s', command, ocustomfile);
 end
 
 [status, result] = CallSystem(command, verbose);

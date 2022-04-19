@@ -58,7 +58,9 @@ function TestSpecifyingAllOptions(testCase)
   % this is the expected command with all options specified
   inputfile = fullfile(pathToWorkspace, inputVolume);
   outputfile = fullfile(pathToWorkspace, outputVolume);
-  expectedCommand = sprintf('slicetimer -i %s -o %s -r 2.5000 -d 1 --odd --down --ocustom %s', inputfile, outputfile, ocustom);
+  ocustomfile = fullfile(pathToWorkspace, ocustom);
+  expectedCommand = sprintf('slicetimer -i %s -o %s -r 2.5000 -d 1 --odd --down --ocustom %s', ...
+   inputfile, outputfile, ocustomfile);
   
   % verify equality
   verifyEqual(testCase, actualCommand, expectedCommand);
