@@ -1,4 +1,4 @@
-function [status, result] = CorrectSliceTiming(pathToWorkspace, config)
+function [status, result, command] = CorrectSliceTiming(pathToWorkspace, config)
 %CORRECTSLICETIMING Corrects slice timing.
 %   Uses `slicetimer` to correct a timeseries.
 %
@@ -67,7 +67,8 @@ end
 
 % filename of single-column custom interleave order file
 if isfield(config, 'ocustom')
-  command = sprintf('%s --ocustom %s', command, config.ocustom);
+  ocustomfile = fullfile(pathToWorkspace, config.ocustom);
+  command = sprintf('%s --ocustom %s', command, ocustomfile);
 end
 
 [status, result] = CallSystem(command, verbose);
