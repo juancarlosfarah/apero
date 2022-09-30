@@ -73,6 +73,7 @@ for i = 1 : numSubjects
   for j = 1 : numInputs
     input = inputs{j};
     % get number of times subject name is needed
+    subjectNameArray = {};
     subjectNameOccurences = count(input, '%s');
     [subjectNameArray{1:subjectNameOccurences}] = deal(subjectName);
     subjectInputs{j} = sprintf(input, subjectNameArray{:});
