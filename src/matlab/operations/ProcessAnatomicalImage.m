@@ -39,7 +39,7 @@ fullInputFile = fullfile(pathToWorkspace, config.inputFile);
 fullOutputFolder = fullfile(pathToWorkspace, config.outputFolder);
 command = 'fsl_anat';
 
-% if .anat directory exist then delete it and make a new one
+% if .anat directory exists then delete it and make a new one
 if config.clobber
   command = strcat([command ' --clobber']);
 end

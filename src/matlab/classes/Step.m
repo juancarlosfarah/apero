@@ -68,7 +68,7 @@ classdef Step
     end
 
     function [passed, err] = performNoClobberCheck(obj, pathToWorkspace)
-      % if outputs are not found in the workspace, abort
+      % if outputs are found in the workspace, abort
       for i = 1 : length(obj.Outputs)
         output = obj.Outputs{i};
         if exist(fullfile(pathToWorkspace, output), 'file')
@@ -104,6 +104,7 @@ classdef Step
       clobber = isfield(obj.Configuration, 'clobber') && ...
                 obj.Configuration.clobber == true;
 
+      % check if we are clobbering outputs
       % if the clobber flag is not set, then we need to check for the
       % presence of outputs that may be clobbered if we run
       if ~clobber
@@ -124,7 +125,6 @@ classdef Step
         warning('running %s step with clobber option', opName);
       end
 
-      % check if we are clobbering outputs
       % need to convert struct to name-value paired arguments
       config = namedargs2cell(obj.getOperationConfiguration());
       % status = 0 signals everything went fine
