@@ -25,9 +25,10 @@ Contents
    :maxdepth: 3
 
    installation
-   getting_started
    concepts
+   getting_started
    usage
+   examples
 
 
 Indices and tables
