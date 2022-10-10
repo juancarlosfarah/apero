@@ -7,7 +7,6 @@ classdef Step
 
   properties
     Operation
-    Parameters = {}
     Dependencies = {}
     Configuration = struct()
     Outputs = {}
