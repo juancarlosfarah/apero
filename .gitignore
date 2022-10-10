@@ -50,6 +50,9 @@ yarn-error.log*
 # python
 /venv
 
+# exclude vim files
+*.swp
+
 # readthedocs
 _build
 _static
