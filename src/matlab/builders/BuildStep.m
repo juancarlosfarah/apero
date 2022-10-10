@@ -1,0 +1,19 @@
+function [step] = BuildStep(stepDefinition)
+%BUILDSTEP Summary of this function goes here
+%   Detailed explanation goes here
+
+stepDefinition = stepConfigurations{i};
+step = Step(stepDefinition.operation, ...
+   step2Config, ...
+         deps2, ...
+         outputs2);
+
+deps = stepDefinition.dependencies;
+outputs = stepDefinition.outputs;
+step1 = Step(@ReorientToStandard, ...
+             , ...
+             deps, ...
+             outputs);
+       
+end
+
