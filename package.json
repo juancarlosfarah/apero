@@ -1,0 +1,34 @@
+{
+  "name": "apero",
+  "version": "0.1.0",
+  "description": "A Preprocessing Pipeline Builder for Neuroimaging Data",
+  "main": "index.js",
+  "author": "Juan Carlos Farah",
+  "contributors": [
+    "Hanna Tolle"
+  ],
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release": "standard-version",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juancarlosfarah/apero.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/juancarlosfarah/apero/issues"
+  },
+  "homepage": "https://apero.readthedocs.io/en/latest/?badge=latest",
+  "devDependencies": {
+    "@commitlint/cli": "17.1.2",
+    "@commitlint/config-conventional": "17.1.0",
+    "husky": "8.0.1",
+    "standard-version": "9.5.0"
+  }
+}
