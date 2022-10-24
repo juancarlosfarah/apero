@@ -1,4 +1,4 @@
-function [status, result] = Binarize(pathToWorkspace, config)
+function [status, result, command] = Binarize(pathToWorkspace, config)
 %BINARIZE Binarize an image.
 %   Uses `fslmaths` to binarize an image.
 %
