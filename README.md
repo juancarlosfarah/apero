@@ -28,7 +28,6 @@ matlab -nodisplay -nosplash -nodesktop -r "try, run('/path/to/scripts/myScript.m
 
 ## Contributors
 
-- Juan Carlos Farah
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
@@ -44,6 +43,4 @@ matlab -nodisplay -nosplash -nodesktop -r "try, run('/path/to/scripts/myScript.m
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
-- Enrico Amico
-- Hanna Tolle
 
