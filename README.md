@@ -2,6 +2,9 @@
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![Documentation Status](https://readthedocs.org/projects/apero/badge/?version=latest)](https://apero.readthedocs.io/en/latest/?badge=latest)
 [![Conventional Commits](https://img.shields.io/badge/conventional%20commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
@@ -29,6 +32,20 @@ matlab -nodisplay -nosplash -nodesktop -r "try, run('/path/to/scripts/myScript.m
 ## Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/hannatolle"><img src="https://avatars.githubusercontent.com/u/88772546?v=4?s=100" width="100px;" alt="hannatolle"/><br /><sub><b>hannatolle</b></sub></a><br /><a href="https://github.com/juancarlosfarah/apero/commits?author=hannatolle" title="Code">💻</a> <a href="https://github.com/juancarlosfarah/apero/commits?author=hannatolle" title="Tests">⚠️</a> <a href="https://github.com/juancarlosfarah/apero/commits?author=hannatolle" title="Documentation">📖</a> <a href="https://github.com/juancarlosfarah/apero/issues?q=author%3Ahannatolle" title="Bug reports">🐛</a> <a href="#ideas-hannatolle" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/juancarlosfarah/apero/pulls?q=is%3Apr+reviewed-by%3Ahannatolle" title="Reviewed Pull Requests">👀</a> <a href="#userTesting-hannatolle" title="User Testing">📓</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
