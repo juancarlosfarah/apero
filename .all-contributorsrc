@@ -1,0 +1,29 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "eamico",
+      "name": "Enrico Amico",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6409808?v=4",
+      "profile": "https://miplab.epfl.ch/index.php/people/eamico",
+      "contributions": [
+        "code",
+        "ideas",
+        "mentoring",
+        "review",
+        "userTesting"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "projectName": "apero",
+  "projectOwner": "juancarlosfarah"
+}
