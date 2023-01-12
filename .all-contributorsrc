@@ -35,6 +35,18 @@
         "review",
         "userTesting"
       ]
+    },
+    {
+      "login": "ss1913",
+      "name": "ss1913",
+      "avatar_url": "https://avatars.githubusercontent.com/u/69032994?v=4",
+      "profile": "https://github.com/ss1913",
+      "contributions": [
+        "userTesting",
+        "ideas",
+        "bug",
+        "promotion"
+      ]
     }
   ],
   "contributorsPerLine": 7,
