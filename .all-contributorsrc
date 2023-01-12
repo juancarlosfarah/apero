@@ -22,6 +22,21 @@
         "maintenance",
         "design"
       ]
+    },
+    {
+      "login": "hannatolle",
+      "name": "hannatolle",
+      "avatar_url": "https://avatars.githubusercontent.com/u/88772546?v=4",
+      "profile": "https://github.com/hannatolle",
+      "contributions": [
+        "code",
+        "test",
+        "doc",
+        "bug",
+        "ideas",
+        "review",
+        "userTesting"
+      ]
     }
   ],
   "contributorsPerLine": 7,
