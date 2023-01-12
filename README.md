@@ -1,6 +1,6 @@
 # Apéro
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
@@ -37,6 +37,7 @@ matlab -nodisplay -nosplash -nodesktop -r "try, run('/path/to/scripts/myScript.m
 <table>
   <tbody>
     <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://juancarlosfarah.com"><img src="https://avatars.githubusercontent.com/u/1707188?v=4?s=100" width="100px;" alt="Juan Carlos Farah"/><br /><sub><b>Juan Carlos Farah</b></sub></a><br /><a href="https://github.com/juancarlosfarah/apero/commits?author=juancarlosfarah" title="Code">💻</a> <a href="https://github.com/juancarlosfarah/apero/commits?author=juancarlosfarah" title="Tests">⚠️</a> <a href="https://github.com/juancarlosfarah/apero/commits?author=juancarlosfarah" title="Documentation">📖</a> <a href="https://github.com/juancarlosfarah/apero/issues?q=author%3Ajuancarlosfarah" title="Bug reports">🐛</a> <a href="#ideas-juancarlosfarah" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/juancarlosfarah/apero/pulls?q=is%3Apr+reviewed-by%3Ajuancarlosfarah" title="Reviewed Pull Requests">👀</a> <a href="#userTesting-juancarlosfarah" title="User Testing">📓</a> <a href="#maintenance-juancarlosfarah" title="Maintenance">🚧</a> <a href="#design-juancarlosfarah" title="Design">🎨</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/hannatolle"><img src="https://avatars.githubusercontent.com/u/88772546?v=4?s=100" width="100px;" alt="hannatolle"/><br /><sub><b>hannatolle</b></sub></a><br /><a href="https://github.com/juancarlosfarah/apero/commits?author=hannatolle" title="Code">💻</a> <a href="https://github.com/juancarlosfarah/apero/commits?author=hannatolle" title="Tests">⚠️</a> <a href="https://github.com/juancarlosfarah/apero/commits?author=hannatolle" title="Documentation">📖</a> <a href="https://github.com/juancarlosfarah/apero/issues?q=author%3Ahannatolle" title="Bug reports">🐛</a> <a href="#ideas-hannatolle" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/juancarlosfarah/apero/pulls?q=is%3Apr+reviewed-by%3Ahannatolle" title="Reviewed Pull Requests">👀</a> <a href="#userTesting-hannatolle" title="User Testing">📓</a></td>
     </tr>
   </tbody>
