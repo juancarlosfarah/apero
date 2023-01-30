@@ -19,16 +19,20 @@ arguments
 end
 
 % print output from system calls if verbose
-systemOutput = '';
 if verbose
   systemOutput = '-echo';
   
   % also log the sentence that will be executed
   fprintf('executing command: %s\n', sentence);
-end
 
-% if operation fails system returns a nonzero value in
-% status and an explanatory message in result
-[status, result] = system(sentence, systemOutput);
+  % if operation fails system returns a nonzero value in
+  % status and an explanatory message in result
+  [status, result] = system(sentence, systemOutput);
+else
+
+  % if operation fails system returns a nonzero value in
+  % status and an explanatory message in result
+  [status, result] = system(sentence);
+end
 
 end
