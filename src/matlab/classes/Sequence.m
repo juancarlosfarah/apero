@@ -1,4 +1,4 @@
-classdef Sequence
+classdef Sequence < handle
   %SEQUENCE Summary of this class goes here
   %   Detailed explanation goes here
 
@@ -23,12 +23,12 @@ classdef Sequence
       %SEQUENCE Construct an instance of this class
       %   Detailed explanation goes here
       arguments
-        steps
-        inputs
-        outputs
-        workspacePath
-        outputPath
-        config
+        steps = {}
+        inputs = {}
+        outputs = {}
+        workspacePath char = '.'
+        outputPath char = '.'
+        config = struct()
       end
 
       % default to empty struct if empty cell array is passed
@@ -85,7 +85,7 @@ classdef Sequence
         end
 
         % copy inputs to workspace
-        for d=1:length(obj.Inputs)
+        for d = 1 : length(obj.Inputs)
           input = obj.Inputs{d};
           if ~exist(fullfile(input), 'file')
             fprintf('missing input %s\n', input);
@@ -99,7 +99,7 @@ classdef Sequence
 
     function obj = cleanUpInputs(obj)
       % delete inputs from workspace
-      for d=1:length(obj.Inputs)
+      for d = 1 : length(obj.Inputs)
         input = obj.Inputs{d};
         [~, fileName, fileExt] = fileparts(input);
         inputFileName = strcat(fileName, fileExt);
@@ -151,23 +151,48 @@ classdef Sequence
     end
 
     function [] = addStep(obj, step)
-        numSteps = length(obj.steps);
-        obj.steps{1, numSteps + 1} = step;
+      % convert to an instance of Step first if not already a Step
+      if ~isa(step, 'Step')
+        step = Step(step.operation, ...
+                    step.configuration, ...
+                    step.dependencies, ...
+                    step.outputs);
+      end
+      % append this step to the end of the steps array
+      numSteps = length(obj.Steps);
+      obj.Steps{1, numSteps + 1} = step;
     end
 
     % setters
-    function obj = set.Steps(obj, steps)
+    function [] = set.Steps(obj, steps)
       obj.Steps = steps;
     end
 
-    function obj = set.WorkspacePath(obj, workspacePath)
+    function [] = set.WorkspacePath(obj, workspacePath)
       obj.WorkspacePath = workspacePath;
     end
 
-    function obj = set.OutputPath(obj, outputPath)
+    function [] = set.OutputPath(obj, outputPath)
       obj.OutputPath = outputPath;
     end
 
+    function [] = set.Configuration(obj, config)
+      % by default we merge the fields from config, with those
+      % in the existing configuration object
+      f = fieldnames(config);
+      for i = 1 : length(f)
+        obj.Configuration.(f{i}) = config.(f{i});
+      end
+    end
+    
+    function [] = set.Inputs(obj, inputs)
+      obj.Inputs = inputs;
+    end
+
+    function [] = set.Outputs(obj, outputs)
+      obj.Outputs = outputs;
+    end
+    
     function [sequenceExecution] = run(obj)
       %RUN Summary of this method goes here
       %   Detailed explanation goes here
@@ -304,6 +329,16 @@ classdef Sequence
       sequenceExecution.Result = output;
       sequenceExecution.Duration = toc(timeStart);
       sequenceExecution.EndTime = datetime;
+    end
+    
+    function [] = printSteps(obj)
+      numSteps = length(obj.Steps);
+      steps = strings(numSteps, 1);
+      for i = 1 : numSteps
+        opName = functions(obj.Steps{i}.Operation).function;
+        steps(i) = sprintf("%d. %s", i, opName);
+      end
+      disp(steps);
     end
   end
 end

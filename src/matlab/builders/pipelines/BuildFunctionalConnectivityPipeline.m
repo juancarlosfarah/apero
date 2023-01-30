@@ -100,7 +100,7 @@ for i = 1 : numSubjects
     for l = 1 : numInputs
       subjectInput = subjectInputs{l};
 
-      % replace subject name
+      % replace run name
       runInputs{l} = strrep(subjectInput, '{run}', run);
     end
 

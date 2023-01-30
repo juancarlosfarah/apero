@@ -4,7 +4,7 @@
 %                                     pathToOutput, ...
 %                                     config)
                                   
-function [sequence] = BuildSequence(sequenceDefinition)
+function [sequence] = BuildSequence(steps, config)
 %BUILDSEQUENCE Example of a sequence builder for brain extraction.
 %   This sequence builder runs brain extraction of a T1w image.
 %   
@@ -17,7 +17,7 @@ function [sequence] = BuildSequence(sequenceDefinition)
 %   - sequence:  Built sequence.
 
 
-numSteps = length(sequenceDefinition.steps);
+numSteps = length(steps);
 
 sequence = Sequence({}, ...
                     sequenceDefinition.inputs, ...
