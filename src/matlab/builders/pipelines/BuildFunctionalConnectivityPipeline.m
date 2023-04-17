@@ -67,7 +67,7 @@ else
 end
 
 % there are four runs per subject
-runs = { 'run-01' }; %, 'run-02', 'run-03', 'run-04' };
+runs = { 'run-01', 'run-02', 'run-03', 'run-04' };
 numRuns = length(runs);
 sequences = cell(1, numSubjects * numRuns);
 

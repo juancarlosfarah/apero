@@ -21,14 +21,15 @@ pathToOutput = fullfile(pathToDataFolder, 'transfer');
 
 %% pipeline: segmentation
 % common configuration
-config.verbose = true;
-config.clobber = true;
+config.verbose = false;
+config.clobber = false;
 config.pathToWorkspace = pathToWorkspace;
 config.pathToDataset = pathToDataset;
 config.pathToParcellations = pathToParcellations;
 config.pathToOutput = pathToOutput;
 % helps debug by not running all subjects
-config.numSubjects = 2;
+% (0 runs all subjects)
+config.numSubjects = 0;
 config.parcellation = parcellation;
 config.parallel = true;
 

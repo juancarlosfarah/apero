@@ -23,13 +23,14 @@ yeoOrderFile = fullfile(pathToDataFolder, 'yeoOrder/yeo_RS7_Shen278.mat');
 
 %% pipeline: functional connectivity
 % common configuration
-config.verbose = true;
-config.clobber = true;
+config.verbose = false;
+config.clobber = false;
 config.pathToWorkspace = pathToWorkspace;
 config.pathToDataset = pathToDataset;
 config.pathToOutput = pathToOutput;
 % helps debug by not running all subjects
-config.numSubjects = 2;
+% (0 runs all subjects)
+config.numSubjects = 0;
 config.parallel = true;
 config.numPcaComponents = 5;
 

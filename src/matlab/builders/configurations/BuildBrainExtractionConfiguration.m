@@ -21,13 +21,14 @@ pathToOutput = fullfile(pathToDataFolder, 'transfer');
 
 %% pipeline: brain extraction
 % common configuration
-config.verbose = true;
-config.clobber = true;
+config.verbose = false;
+config.clobber = false;
 config.pathToWorkspace = pathToWorkspace;
 config.pathToDataset = pathToDataset;
 config.pathToOutput = pathToOutput;
 % helps debug by not running all subjects
-config.numSubjects = 2;
+% (0 runs all subjects)
+config.numSubjects = 0;
 config.parallel = true;
 
 % sequence level configurations
@@ -54,7 +55,7 @@ step3.optional = false;
 
 %% step 4
 % use fsl_anat to bias correct and get subcortical segmentation
-step4.clobber = true;
+step4.clobber = config.clobber;
 step4.noReorient = true;
 step4.noCrop = true;
 step5.verbose = config.verbose;
