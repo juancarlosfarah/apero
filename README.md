@@ -22,7 +22,7 @@ If you are running `matlab` from the command line, you can run your scripts
 using a command similar to the one below.  
 
 ```bash
-matlab -nodisplay -nosplash -nodesktop -r "try, run('/path/to/scripts/myScript.m'); catch me, e = getReport(me); fprintf('%s\n', e); end; exit;"
+matlab -nodisplay -nosplash -nodesktop -r "try, run('/path/to/scripts/myScript.m'); catch me, e = getReport(me); fprintf('%s\n', e); end; exit;" 2>&1 | tee /path/to/logs/apero-`date -u +"%Y-%m-%dT%H:%M:%SZ"`.log
 ```
 
 
