@@ -25,6 +25,28 @@ using a command similar to the one below.
 matlab -nodisplay -nosplash -nodesktop -r "try, run('/path/to/scripts/myScript.m'); catch me, e = getReport(me); fprintf('%s\n', e); end; exit;" 2>&1 | tee /path/to/logs/apero-`date -u +"%Y-%m-%dT%H:%M:%SZ"`.log
 ```
 
+## Citing
+
+If you use this software in your research, please cite the following:
+
+Farah, J. C., Tolle, H. M., Stampacchia, S., Gillet, D., & Amico, E. (2024). Apéro: A Preprocessing Pipeline Builder for Neuroimaging Data. Zenodo. [https://doi.org/10.5281/zenodo.13881486](https://doi.org/10.5281/zenodo.13881486)
+
+```
+@software{farah2024apero,
+    author       = {Farah, Juan Carlos and
+                    Tolle, Hanna M. and
+                    Stampacchia, Sara and
+                    Gillet, Denis and
+                    Amico, Enrico},
+    title        = {{Apéro: A Preprocessing Pipeline Builder for Neuroimaging Data}},
+    year         = 2024,
+    publisher    = {Zenodo},
+    doi          = {10.5281/zenodo.13881486},
+    url          = {https://doi.org/10.5281/zenodo.13881486}
+}
+```
+
+🙏
 
 ## Contributors
 
