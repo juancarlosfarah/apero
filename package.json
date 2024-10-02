@@ -1,6 +1,6 @@
 {
   "name": "apero",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A Preprocessing Pipeline Builder for Neuroimaging Data",
   "main": "index.js",
   "author": "Juan Carlos Farah",
