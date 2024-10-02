@@ -1,3 +1,4 @@
+# Automate releases of new app versions
 name: release-please
 
 on:
@@ -5,17 +6,25 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+  pull-requests: write
+  # needed for the auto-tag
+  issues: write
+
 jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      - uses: google-github-actions/release-please-action@v4
+      - uses: googleapis/release-please-action@v4
         id: release
         with:
+          token: ${{ secrets.RELEASE_PLEASE_PAT }}
           release-type: node
 
       - uses: actions/checkout@v4
 
+      # put created tag in an env variable to be sent to the dispatch
       - name: Set tag
         if: ${{ steps.release.outputs.releases_created == 'true' }}
         id: set-tag
