@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: "Farah"
+    given-names: "Juan Carlos"
+    orcid: "https://orcid.org/0000-0002-2477-4196"
+  - family-names: "Tolle"
+    given-names: "Hanna M."
+    orcid: "https://orcid.org/0000-0003-1837-8442"
+  - family-names: "Stampacchia"
+    given-names: "Sara"
+    orcid: "https://orcid.org/0000-0001-9545-3376"
+  - family-names: "Gillet"
+    given-names: "Denis"
+    orcid: "https://orcid.org/0000-0002-2570-929X"
+  - family-names: "Amico"
+    given-names: "Enrico"
+    orcid: "https://orcid.org/0000-0001-6705-9689"
+title: "Apéro: A Preprocessing Pipeline Builder for Neuroimaging Data"
+version: 0.1.2
+date-released: 2024-10-02
+doi: "10.5281/zenodo.13881486"
+url: "https://github.com/juancarlosfarah/apero"
